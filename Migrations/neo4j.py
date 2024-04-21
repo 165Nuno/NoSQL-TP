@@ -15,6 +15,15 @@ password = "12345678"
 neo4j = Graph(uri, auth=(user, password))
 print("CONEXAO NEO FEITA\n")
 
+# Consulta Cypher que deseja executar
+cypher_query = """
+MATCH (n) DETACH DELETE n
+"""
+
+# Execute a consulta
+result = neo4j.run(cypher_query)
+
+
 # Consultas SQL para obters os dados das tabelas
 sql_medical_history = "SELECT * FROM SYSTEM.MEDICAL_HISTORY"
 sql_medicine = "SELECT * FROM SYSTEM.MEDICINE"
@@ -207,6 +216,36 @@ with oracle_connection.cursor() as cursor:
         techincian_node = Node("Technician",
                          emp_id=row[0])
         neo4j.create(techincian_node)
+
+    # Encontrando todos os nodos "Patient" no Neo4j
+    patient_nodes = neo4j.nodes.match("Patient")
+
+    # Iterando sobre os nodos "Patient"
+    for patient_node in patient_nodes:
+        # Encontrando os registros de "Medical_History" associados a este paciente
+        medical_history_nodes = neo4j.nodes.match("Medical_History", id_patient=patient_node["id_patient"])
+        
+        # Iterando sobre os registros de "Medical_History" encontrados
+        for medical_history_node in medical_history_nodes:
+            # Criando a relação "HAS_MEDICAL_HISTORY" entre o nodo "Patient" e cada nodo "Medical_History"
+            relationship = Relationship(patient_node, "HAS_MEDICAL_HISTORY", medical_history_node)
+            neo4j.create(relationship)
+
+    # Encontrando todos os nodos "Patient" no Neo4j
+    patient_nodes = neo4j.nodes.match("Patient")
+
+    # Iterando sobre os nodos "Patient"
+    for patient_node in patient_nodes:
+        # Encontrando o nodo "Insurance" associado a este paciente
+        insurance_node = neo4j.nodes.match("Insurance", policy_number=patient_node["policy_number"]).first()
+        
+        # Verificando se o nodo "Insurance" foi encontrado
+        if insurance_node:
+            # Criando a relação "HAS_INSURANCE" entre o nodo "Patient" e o nodo "Insurance"
+            relationship = Relationship(patient_node, "HAS_INSURANCE", insurance_node)
+            neo4j.create(relationship)
+
+
 
 
     staff_nodes = neo4j.nodes.match("Staff")
