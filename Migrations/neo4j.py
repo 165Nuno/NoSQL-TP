@@ -1,27 +1,22 @@
 import oracledb
 from py2neo import Graph, Node, Relationship
 
-# Criada a ligação com a base de dados Oracle
 oracle_connection = oracledb.connect(user="sys", password="<12345>",
                               dsn="localhost:1521/xe", mode=oracledb.SYSDBA)
 
 print("CONEXAO ORACLE FEITA\n")
-# Informações de conexão para o Neo4j
 uri = "bolt://localhost:7687"
 user = "neo4j"
 password = "12345678"
 
-# Criada a conexão com a base de dados Neo4j
 neo4j = Graph(uri, auth=(user, password))
 print("CONEXAO NEO FEITA\n")
 
-# Consulta Cypher que deseja executar
-cypher_query = """
+apagar_query = """
 MATCH (n) DETACH DELETE n
 """
-
-# Execute a consulta
-result = neo4j.run(cypher_query)
+# Serve para limpar os dados que estão -> teste só
+result = neo4j.run(apagar_query)
 
 
 # Consultas SQL para obters os dados das tabelas
@@ -217,45 +212,161 @@ with oracle_connection.cursor() as cursor:
                          emp_id=row[0])
         neo4j.create(techincian_node)
 
-    # Encontrando todos os nodos "Patient" no Neo4j
-    patient_nodes = neo4j.nodes.match("Patient")
+    # Dados da tabela department
+    cursor.execute(sql_department)
+    for row in cursor:
+        department_node = Node("Department",
+                               id_department=row[0],
+                               dept_head=row[1],
+                               dept_name=row[2],
+                               emp_count=row[3])
+        neo4j.create(department_node)
 
-    # Iterando sobre os nodos "Patient"
+    
+    
+    patient_nodes = neo4j.nodes.match("Patient")
     for patient_node in patient_nodes:
-        # Encontrando os registros de "Medical_History" associados a este paciente
         medical_history_nodes = neo4j.nodes.match("Medical_History", id_patient=patient_node["id_patient"])
-        
-        # Iterando sobre os registros de "Medical_History" encontrados
+
         for medical_history_node in medical_history_nodes:
-            # Criando a relação "HAS_MEDICAL_HISTORY" entre o nodo "Patient" e cada nodo "Medical_History"
             relationship = Relationship(patient_node, "HAS_MEDICAL_HISTORY", medical_history_node)
             neo4j.create(relationship)
 
-    # Encontrando todos os nodos "Patient" no Neo4j
     patient_nodes = neo4j.nodes.match("Patient")
-
-    # Iterando sobre os nodos "Patient"
     for patient_node in patient_nodes:
-        # Encontrando o nodo "Insurance" associado a este paciente
         insurance_node = neo4j.nodes.match("Insurance", policy_number=patient_node["policy_number"]).first()
         
-        # Verificando se o nodo "Insurance" foi encontrado
         if insurance_node:
-            # Criando a relação "HAS_INSURANCE" entre o nodo "Patient" e o nodo "Insurance"
             relationship = Relationship(patient_node, "HAS_INSURANCE", insurance_node)
             neo4j.create(relationship)
 
 
+    # [STAFF] -> [DOCTOR]
+    doctor_nodes = neo4j.nodes.match("Doctor")
+    for doctor_node in doctor_nodes:
+        staff_node = neo4j.nodes.match("Staff", emp_id=doctor_node["emp_id"]).first()
+        
+        if staff_node:
+            relationship = Relationship(staff_node, "IS_DOCTOR", doctor_node)
+            neo4j.create(relationship)
 
+    # [STAFF] -> [NURSE]
+    nurse_nodes = neo4j.nodes.match("Nurse")
+    for nurse_node in nurse_nodes:
+        staff_node = neo4j.nodes.match("Staff", emp_id=nurse_node["emp_id"]).first()
+        
+        if staff_node:
+            relationship = Relationship(staff_node, "IS_NURSE", nurse_node)
+            neo4j.create(relationship)
 
+    # [STAFF] -> [TECHNICIAN]
     staff_nodes = neo4j.nodes.match("Staff")
-
     for staff_node in staff_nodes:
-
         technician_node = neo4j.nodes.match("Technician", emp_id=staff_node["emp_id"]).first()
 
         if technician_node:
-            relationship = Relationship(staff_node, "WORKS_AS_TECHNICIAN", technician_node)
+            relationship = Relationship(staff_node, "IS_TECHNICIAN", technician_node)
+            neo4j.create(relationship)
+
+
+    # [PATIENT] -> [EPISODE]
+    patient_nodes = neo4j.nodes.match("Patient")
+    for patient_node in patient_nodes:
+        episode_node = neo4j.nodes.match("Episode", id_patient=patient_node["id_patient"]).first()
+        
+        if episode_node:
+            relationship = Relationship(patient_node, "HAS_EPISODE", episode_node)
+            neo4j.create(relationship)
+
+    # [PATIENT] -> [EMERGENCY_CONTACT]
+    patient_nodes = neo4j.nodes.match("Patient")
+    for patient_node in patient_nodes:
+        emergency_contact_node = neo4j.nodes.match("Emergency_Contact", id_patient=patient_node["id_patient"]).first()
+        
+        if emergency_contact_node:
+            relationship = Relationship(patient_node, "HAS_EMERGENCY_CONTACT", emergency_contact_node)
+            neo4j.create(relationship)
+
+    # [EPISODE] -> [BILL]
+    bill_nodes = neo4j.nodes.match("Bill")
+    for bill_node in bill_nodes:
+        episode_node = neo4j.nodes.match("Episode", id_episode=bill_node["ip_episode"]).first()
+        
+        if episode_node:
+            relationship = Relationship(episode_node, "HAS_BILL", bill_node)
+            neo4j.create(relationship)
+
+    # [EPISODE] -> [PRESCRIPTION]
+    prescription_nodes = neo4j.nodes.match("Prescription")
+    for prescription_node in prescription_nodes:
+        episode_node = neo4j.nodes.match("Episode", id_episode=prescription_node["id_episode"]).first()
+        
+        if episode_node:
+            relationship = Relationship(episode_node, "HAS_PRESCRIPTION", prescription_node)
+            neo4j.create(relationship)
+
+    # [PRESCRIPTION] -> [MEDICINE]
+    prescription_nodes = neo4j.nodes.match("Prescription")
+    for prescription_node in prescription_nodes:
+        medicine_node = neo4j.nodes.match("Medicine", id_medicine=prescription_node["id_medicine"]).first()
+        
+        if medicine_node:
+            relationship = Relationship(prescription_node, "PRESCRIBED_MEDICINE", medicine_node)
+            neo4j.create(relationship)
+
+    
+    # [EPISODE] -> [HOSPITALIZATION]
+    hospitalization_nodes = neo4j.nodes.match("Hospitalization")
+    for hospitalization_node in hospitalization_nodes:
+        episode_node = neo4j.nodes.match("Episode", id_episode=hospitalization_node["id_episode"]).first()
+        
+        if episode_node:
+            relationship = Relationship(episode_node, "HAS_HOSPITALIZATION", hospitalization_node)
+            neo4j.create(relationship)
+    
+    # [HOSPITALIZATION] -> [ROOM]
+    hospitalization_nodes = neo4j.nodes.match("Hospitalization")
+    for hospitalization_node in hospitalization_nodes:
+        room_node = neo4j.nodes.match("Room", id_room=hospitalization_node["id_room"]).first()
+        
+        if room_node:
+            relationship = Relationship(hospitalization_node, "HAS_ROOM", room_node)
+            neo4j.create(relationship)
+
+    # [HOSPITALIZATION] -> [NURSE]
+    hospitalization_nodes = neo4j.nodes.match("Hospitalization")
+    for hospitalization_node in hospitalization_nodes:
+        nurse_node = neo4j.nodes.match("Nurse", emp_id=hospitalization_node["responsible_nurse"]).first()
+        
+        if nurse_node:
+            relationship = Relationship(hospitalization_node, "HAS_NURSE", nurse_node)
+            neo4j.create(relationship)
+        
+    # [EPISODE] -> [APPOINTMENT]  
+    episode_nodes = neo4j.nodes.match("Episode")
+    for episode_node in episode_nodes:
+        appointment_node = neo4j.nodes.match("Appointment", id_episode=episode_node["id_episode"]).first()
+        
+        if appointment_node:
+            relationship = Relationship(episode_node, "HAS_APPOINTMENT", appointment_node)
+            neo4j.create(relationship)
+
+    # [APPOINTMENT] -> [DOCTOR]  
+    appointment_nodes = neo4j.nodes.match("Appointment")
+    for appointment_node in appointment_nodes:
+        doctor_node = neo4j.nodes.match("Doctor", emp_id=appointment_node["id_doctor"]).first()
+        
+        if doctor_node:
+            relationship = Relationship(appointment_node, "HAS_DOCTOR", doctor_node)
+            neo4j.create(relationship)
+
+    # [STAFF] -> [DEPARTMENT]  
+    department_nodes = neo4j.nodes.match("Department")
+    for department_node in department_nodes:
+        staff_nodes = neo4j.nodes.match("Staff", id_department=department_node["id_department"])
+
+        for staff_node in staff_nodes:
+            relationship = Relationship(staff_node, "WORKS_IN_DEPARTMENT", department_node)
             neo4j.create(relationship)
 
 print("boas")
