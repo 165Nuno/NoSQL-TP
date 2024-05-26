@@ -1,17 +1,19 @@
 import oracledb
 from py2neo import Graph, Node, Relationship
-
-#oracle_connection = oracledb.connect(user="sys", password="<12345>",
-oracle_connection = oracledb.connect(user="sys", password="password",
+import time
+print("Inicio da migração para Neo4j")
+inicio = time.time()
+oracle_connection = oracledb.connect(user="sys", password="<12345>",
+#oracle_connection = oracledb.connect(user="sys", password="password",
                               dsn="localhost:1521/xe", mode=oracledb.SYSDBA)
 
-print("CONEXAO ORACLE FEITA\n")
+print("Conexão Oracle realizada com sucesso!")
 uri = "bolt://localhost:7687"
 user = "neo4j"
 password = "12345678"
 
 neo4j = Graph(uri, auth=(user, password))
-print("CONEXAO NEO FEITA\n")
+print("Conexão Neo4j realizada com sucesso!")
 
 # Consultas SQL para obters os dados das tabelas
 sql_medical_history = "SELECT * FROM SYSTEM.MEDICAL_HISTORY"
@@ -32,13 +34,14 @@ sql_bill = "SELECT * FROM SYSTEM.BILL"
 sql_lab_screening = "SELECT * FROM SYSTEM.LAB_SCREENING"
 sql_technician = "SELECT * FROM SYSTEM.TECHNICIAN"
 
+
 def clear_neo4j_database(neo4j):
     """Delete all nodes and relationships in the Neo4j database."""
     apagar_query = """
     MATCH (n) DETACH DELETE n
     """
     neo4j.run(apagar_query)
-    print("Neo4j database cleared\n")
+    print("Dados presentes na base de dados Neo4j apagados!")
 
 def create_relationships(neo4j):
     """Create relationships between nodes in the Neo4j database."""
@@ -90,20 +93,21 @@ def create_relationships(neo4j):
     # [PATIENT] -> [EPISODE]
     patient_nodes = neo4j.nodes.match("Patient")
     for patient_node in patient_nodes:
-        episode_node = neo4j.nodes.match("Episode", id_patient=patient_node["id_patient"]).first()
-        
-        if episode_node:
+        episode_nodes = neo4j.nodes.match("Episode", id_patient=patient_node["id_patient"])
+
+        for episode_node in episode_nodes:
             relationship = Relationship(patient_node, "HAS_EPISODE", episode_node)
             neo4j.create(relationship)
 
     # [PATIENT] -> [EMERGENCY_CONTACT]
     patient_nodes = neo4j.nodes.match("Patient")
     for patient_node in patient_nodes:
-        emergency_contact_node = neo4j.nodes.match("Emergency_Contact", id_patient=patient_node["id_patient"]).first()
+        emergency_contact_nodes = neo4j.nodes.match("Emergency_Contact", id_patient=patient_node["id_patient"])
         
-        if emergency_contact_node:
-            relationship = Relationship(patient_node, "HAS_EMERGENCY_CONTACT", emergency_contact_node)
+        for emergency_node in emergency_contact_nodes:
+            relationship = Relationship(patient_node, "HAS_EMERGENCY_CONTACT", emergency_node)
             neo4j.create(relationship)
+       
 
     # [EPISODE] -> [BILL]
     bill_nodes = neo4j.nodes.match("Bill")
@@ -387,9 +391,7 @@ def create_nodes(neo4j):
 
 def initialize_neo4j(neo4j):
     clear_neo4j_database(neo4j)
-    # Create neo4j nodes
     create_nodes(neo4j)
-    # Create neo4j relationships
     create_relationships(neo4j)
 
 def check_relationship_counts(neo4j):
@@ -422,10 +424,11 @@ def check_relationship_counts(neo4j):
 
 
 with oracle_connection.cursor() as cursor:
-    # initialize_neo4j(neo4j)
-
-    # Check relationship counts
-    check_relationship_counts(neo4j)
+    initialize_neo4j(neo4j)
+    #check_relationship_counts(neo4j)
     
-    
-print("boas")
+fim = time.time()
+tempo = fim - inicio
+tempo_arredondado = round(tempo, 2)
+print("Fim da Migração, tudo realizado com sucesso!")
+print(f"Tempo utilizado para realizar a migração:{tempo_arredondado} segundos") 
