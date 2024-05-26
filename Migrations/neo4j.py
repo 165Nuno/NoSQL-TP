@@ -400,28 +400,29 @@ def check_relationship_counts(neo4j):
         ("Lab_Screening PERFORMED_BY Technician", "MATCH (ls:Lab_Screening)-[:PERFORMED_BY]->(t:Technician) RETURN COUNT(*) AS count"),
         ("Lab_Screening BELONGS_TO_EPISODE Episode", "MATCH (ls:Lab_Screening)-[:BELONGS_TO_EPISODE]->(e:Episode) RETURN COUNT(*) AS count"),
         ("Staff IS_DOCTOR Doctor", "MATCH (s:Staff)-[:IS_DOCTOR]->(d:Doctor) RETURN COUNT(*) AS count"),
-        ("Nurse WORKS_IN_DEPARTMENT Department", "MATCH (s:Staff)-[:IS_NURSE]->(n:Nurse)-[:WORKS_IN_DEPARTMENT]->(d:Department) RETURN COUNT(*) AS count"),
+        ("Staff IS_NURSE Nurse", "MATCH (s:Staff)-[:IS_NURSE]->(n:Nurse) RETURN COUNT(*) AS count"),
         ("Patient HAS_INSURANCE Insurance", "MATCH (p:Patient)-[:HAS_INSURANCE]->(i:Insurance) RETURN COUNT(*) AS count"),
         ("Hospitalization HAS_ROOM Room", "MATCH (h:Hospitalization)-[:HAS_ROOM]->(r:Room) RETURN COUNT(*) AS count"),
         ("Episode HAS_BILL Bill", "MATCH (e:Episode)-[:HAS_BILL]->(b:Bill) RETURN COUNT(*) AS count"),
         ("Appointment HAS_DOCTOR Doctor", "MATCH (a:Appointment)-[:HAS_DOCTOR]->(d:Doctor) RETURN COUNT(*) AS count"),
-        ("Medical_History HAS_MEDICAL_HISTORY Patient", "MATCH (mh:Medical_History)-[:HAS_MEDICAL_HISTORY]->(p:Patient) RETURN COUNT(*) AS count"),
         ("Prescription PRESCRIBED_MEDICINE Medicine", "MATCH (pr:Prescription)-[:PRESCRIBED_MEDICINE]->(m:Medicine) RETURN COUNT(*) AS count"),
-        ("Hospitalization HAS_HOSPITALIZATION Episode", "MATCH (h:Hospitalization)-[:HAS_HOSPITALIZATION]->(e:Episode) RETURN COUNT(*) AS count"),
+        ("Episode HAS_HOSPITALIZATION Hospitalization", "MATCH (e:Episode)-[:HAS_HOSPITALIZATION]->(h:Hospitalization) RETURN COUNT(*) AS count"),
         ("Hospitalization HAS_NURSE Nurse", "MATCH (h:Hospitalization)-[:HAS_NURSE]->(n:Nurse) RETURN COUNT(*) AS count"),
-        ("Appointment HAS_APPOINTMENT Episode", "MATCH (a:Appointment)-[:HAS_APPOINTMENT]->(e:Episode) RETURN COUNT(*) AS count"),
+        ("Episode HAS_APPOINTMENT Appointment", "MATCH (e:Episode)-[:HAS_APPOINTMENT]->(a:Appointment) RETURN COUNT(*) AS count"),
         ("Staff WORKS_IN_DEPARTMENT Department", "MATCH (s:Staff)-[:WORKS_IN_DEPARTMENT]->(d:Department) RETURN COUNT(*) AS count"),
         ("Patient HAS_EMERGENCY_CONTACT Emergency_Contact", "MATCH (p:Patient)-[:HAS_EMERGENCY_CONTACT]->(ec:Emergency_Contact) RETURN COUNT(*) AS count"),
-        ("Lab_Screening BELONGS_TO_EPISODE Episode", "MATCH (ls:Lab_Screening)-[:BELONGS_TO_EPISODE]->(e:Episode) RETURN COUNT(*) AS count")
+        ("Patient HAS_EPISODE Episode", "MATCH (p:Patient)-[:HAS_EPISODE]->(e:Episode) RETURN COUNT(*) AS count"),
+        ("Staff IS_TECHNICIAN Technician", "MATCH (s:Staff)-[:IS_TECHNICIAN]->(t:Technician) RETURN COUNT(*) AS count"),
     ]
     
+    total_count = 0
     for label, query in queries:
         result = neo4j.run(query).data()
         print(f"{label}: {result[0]['count']}")
 
 
 with oracle_connection.cursor() as cursor:
-    initialize_neo4j(neo4j)
+    # initialize_neo4j(neo4j)
 
     # Check relationship counts
     check_relationship_counts(neo4j)
