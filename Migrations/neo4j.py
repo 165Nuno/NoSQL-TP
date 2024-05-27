@@ -1,6 +1,9 @@
 import oracledb
 from py2neo import Graph, Node, Relationship
 import time
+
+# 2089 NODOS e 3461 RELAÇÕES
+
 print("Inicio da migração para Neo4j")
 inicio = time.time()
 oracle_connection = oracledb.connect(user="sys", password="<12345>",
@@ -341,7 +344,7 @@ def create_nodes(neo4j):
     cursor.execute(sql_emergency_contact)
     for row in cursor:
         emergency_contact_node = Node("Emergency_Contact",
-                         contact_phone=row[0],
+                         contact_name=row[0],
                          phone=row[1],
                          relation=row[2],
                          id_patient=row[3])
