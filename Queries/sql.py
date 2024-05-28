@@ -8,15 +8,15 @@ print("Conexão Oracle realizada com sucesso!")
 # Lista por ordem descrescente os medicamentos mais caros
 def run_query1_sql():
     sql_query = """
-    SELECT 
-        idmedicine AS id, 
-        m_name AS name, 
-        m_cost AS cost
-    FROM 
-        SYSTEM.medicine
-    ORDER BY 
-        m_cost DESC,
-        idmedicine ASC
+SELECT 
+    idmedicine AS id, 
+    m_name AS name, 
+    m_cost AS cost
+FROM 
+    SYSTEM.medicine
+ORDER BY 
+    m_cost DESC,
+    idmedicine ASC
     """
     cursor = oracle_connection.cursor()
     cursor.execute(sql_query)
@@ -197,6 +197,93 @@ ORDER BY
         results.append({
             'department_name': row[0],
             'staff_count': row[1]
+        })
+    return results
+
+# O funcionário com mais tempo de serviço ativo
+def run_query8_sql():
+    sql_query = """
+SELECT 
+    s.emp_id AS emp_id, 
+    s.emp_fname AS first_name, 
+    s.emp_lname AS last_name, 
+    (ROUND((SYSDATE - s.date_joining) / 365.25, 2)) AS years_at_hospital
+FROM 
+    SYSTEM.staff s
+WHERE 
+    s.is_active_status = 'Y'
+ORDER BY 
+    (SYSDATE - s.date_joining) DESC
+FETCH FIRST 1 ROWS ONLY
+    """
+    cursor = oracle_connection.cursor()
+    cursor.execute(sql_query)
+    results = []
+    for row in cursor:
+        results.append({
+            'emp_id': row[0],
+            'first_name': row[1],
+            'last_name': row[2],
+            'years_at_hospital': row[3]
+        })
+    return results
+
+# O paciente com mais condições médicas e suas condições
+def run_query9_sql():
+    sql_query = """
+SELECT 
+    p.idpatient AS id_patient, 
+    p.patient_fname AS first_name, 
+    p.patient_lname AS last_name, 
+    COUNT(mh.record_id) AS condition_count,
+    LISTAGG(mh.condition, ', ') WITHIN GROUP (ORDER BY mh.condition) AS conditions
+FROM 
+    SYSTEM.patient p
+JOIN 
+    SYSTEM.MEDICAL_HISTORY mh ON p.idpatient = mh.idpatient
+GROUP BY 
+    p.idpatient, p.patient_fname, p.patient_lname
+ORDER BY 
+    condition_count DESC
+FETCH FIRST 1 ROWS ONLY
+    """
+    cursor = oracle_connection.cursor()
+    cursor.execute(sql_query)
+    results = []
+    for row in cursor:
+        results.append({
+            'id_patient': row[0],
+            'first_name': row[1],
+            'last_name': row[2],
+            'condition_count': row[3],
+            'conditions': row[4]
+        })
+    return results
+
+# Listar todas as hospitalizações em uma sala específica
+def run_query10_sql():
+    sql_query = """
+SELECT 
+    r.idroom AS room_id, 
+    r.room_type AS room_type, 
+    COUNT(h.idepisode) AS hospitalization_count
+FROM 
+    SYSTEM.room r
+LEFT JOIN 
+    SYSTEM.hospitalization h ON r.idroom = h.room_idroom
+GROUP BY 
+    r.idroom, r.room_type
+ORDER BY 
+    hospitalization_count DESC, room_id ASC
+    """
+    cursor = oracle_connection.cursor()
+    cursor.execute(sql_query)
+    results = []
+    for row in cursor:
+        results.append({
+            'room_id': row[0],
+            'room_type': row[1],
+            'hospitalization_count': row[2]
         })
     return results
 

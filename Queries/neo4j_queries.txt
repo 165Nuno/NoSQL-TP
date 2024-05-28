@@ -15,7 +15,7 @@ ORDER BY episode_count DESC, id_patient ASC
 QUERY 3 -- Listar pacientes e as seus contactos de emergência
 
 MATCH (p:Patient)-[:HAS_EMERGENCY_CONTACT]->(ec:Emergency_Contact)
-RETURN p.id_patient, p.patient_fname, p.patient_lname, ec.contact_name, ec.phone
+RETURN p.id_patient AS id_patient, p.patient_fname AS patient_fname, p.patient_lname AS patient_lname, ec.contact_name AS contact_name, ec.phone AS phone
 ORDER BY p.id_patient ASC
 
 QUERY 4 -- Listar as salas com o maior custo de hospitalização total
@@ -48,7 +48,7 @@ MATCH (s:Staff)
 WHERE s.is_active_status = 'Y'
 WITH s, duration.inDays(date(s.date_joining), date()).days AS days_at_hospital
 RETURN s.emp_id AS emp_id, s.emp_fname AS first_name, s.emp_lname AS last_name, 
-       days_at_hospital / 365.25 AS years_at_hospital
+       ROUND(days_at_hospital / 365.25, 2) AS years_at_hospital
 ORDER BY days_at_hospital DESC
 LIMIT 1
 
@@ -56,13 +56,15 @@ QUERY 9 -- O paciente com mais condições médicas e suas condições
 
 MATCH (p:Patient)-[:HAS_MEDICAL_HISTORY]->(mh:Medical_History)
 WITH p, COUNT(mh) AS condition_count, COLLECT(mh.condition) AS conditions
-RETURN p.id_patient AS id_patient, p.patient_fname AS first_name, p.patient_lname AS last_name, condition_count, conditions
+RETURN p.id_patient AS id_patient, p.patient_fname AS first_name, p.patient_lname AS last_name,
+       condition_count, REDUCE(s = '', condition IN conditions | s + CASE WHEN s = '' THEN '' ELSE ', ' END + condition) AS conditions
 ORDER BY condition_count DESC
 LIMIT 1
 
 QUERY 10 -- Listar todas as hospitalizações em uma sala específica
 
-MATCH (r:Room)<-[:HAS_ROOM]-(h:Hospitalization)
+MATCH (r:Room)
+OPTIONAL MATCH (r)<-[:HAS_ROOM]-(h:Hospitalization)
 RETURN r.id_room AS room_id, r.room_type AS room_type, COUNT(h) AS hospitalization_count
 ORDER BY hospitalization_count DESC, room_id ASC
 

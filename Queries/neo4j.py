@@ -12,9 +12,9 @@ print("Conexão Neo4j realizada com sucesso!")
 # Lista por ordem descrescente os medicamentos mais caros
 def run_query1_neo4j():
     query = """
-    MATCH (m:Medicine)
-    RETURN m.id_medicine AS id, m.m_name AS name, m.m_cost AS cost
-    ORDER BY m.m_cost DESC
+MATCH (m:Medicine)
+RETURN m.id_medicine AS id, m.m_name AS name, m.m_cost AS cost
+ORDER BY m.m_cost DESC
     """
     result = neo4j.run(query)
     neo4j_results = []
@@ -127,6 +127,68 @@ ORDER BY staff_count DESC
         neo4j_results.append({
             'department_name': record['department_name'],
             'staff_count': record['staff_count']
+        })
+    return neo4j_results
+
+# O funcionário com mais tempo de serviço ativo
+def run_query8_neo4j():
+    query = """
+MATCH (s:Staff)
+WHERE s.is_active_status = 'Y'
+WITH s, duration.inDays(date(s.date_joining), date()).days AS days_at_hospital
+RETURN s.emp_id AS emp_id, s.emp_fname AS first_name, s.emp_lname AS last_name, 
+       ROUND(days_at_hospital / 365.25, 2) AS years_at_hospital
+ORDER BY days_at_hospital DESC
+LIMIT 1
+    """
+    result = neo4j.run(query)
+    neo4j_results = []
+    for record in result:
+        neo4j_results.append({
+            'emp_id': record['emp_id'],
+            'first_name': record['first_name'],
+            'last_name': record['last_name'],
+            'years_at_hospital': record['years_at_hospital']
+        })
+    return neo4j_results
+
+# O paciente com mais condições médicas e suas condições
+def run_query9_neo4j():
+    query = """
+MATCH (p:Patient)-[:HAS_MEDICAL_HISTORY]->(mh:Medical_History)
+WITH p, COUNT(mh) AS condition_count, COLLECT(mh.condition) AS conditions
+RETURN p.id_patient AS id_patient, p.patient_fname AS first_name, p.patient_lname AS last_name,
+       condition_count, REDUCE(s = '', condition IN conditions | s + CASE WHEN s = '' THEN '' ELSE ', ' END + condition) AS conditions
+ORDER BY condition_count DESC
+LIMIT 1
+    """
+    result = neo4j.run(query)
+    neo4j_results = []
+    for record in result:
+        neo4j_results.append({
+            'id_patient': record['id_patient'],
+            'first_name': record['first_name'],
+            'last_name': record['last_name'],
+            'condition_count': record['condition_count'],
+            'conditions': record['conditions']
+        })
+    return neo4j_results
+
+# Listar todas as hospitalizações em uma sala específica
+def run_query10_neo4j():
+    query = """
+MATCH (r:Room)
+OPTIONAL MATCH (r)<-[:HAS_ROOM]-(h:Hospitalization)
+RETURN r.id_room AS room_id, r.room_type AS room_type, COUNT(h) AS hospitalization_count
+ORDER BY hospitalization_count DESC, room_id ASC
+    """
+    result = neo4j.run(query)
+    neo4j_results = []
+    for record in result:
+        neo4j_results.append({
+            'room_id': record['room_id'],
+            'room_type': record['room_type'],
+            'hospitalization_count': record['hospitalization_count']
         })
     return neo4j_results
 
