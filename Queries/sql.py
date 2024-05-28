@@ -57,5 +57,36 @@ def run_query2_sql():
         })
     return results
 
+def run_query3_sql():
+    sql_query = """
+    SELECT
+        p.idpatient,
+        p.patient_fname,
+        p.patient_lname,
+        SUM(b.total) as sum_total_bill
+    FROM
+        SYSTEM.patient p
+    JOIN
+        SYSTEM.episode e ON p.idpatient = e.patient_idpatient
+    JOIN
+        SYSTEM.bill b ON e.idepisode = b.idepisode
+    GROUP BY
+        p.idpatient, p.patient_fname, p.patient_lname
+    ORDER BY
+        sum_total_bill DESC
+    """
+    cursor = oracle_connection.cursor()
+    cursor.execute(sql_query)
+    results = []
+    for row in cursor:
+        results.append({
+            "idpatient": row[0],
+            "patient_fname": row[1],
+            "patient_lname": row[2],
+            "sum_total_bill": row[3]
+        })
+    return results
+
+
 if __name__ == "__main__":
     run_query1_sql()

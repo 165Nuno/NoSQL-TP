@@ -47,5 +47,22 @@ def run_query2_neo4j():
         })
     return neo4j_results
 
+def run_query3_neo4j():
+    query = """
+    MATCH (p:Patient)-[:HAS_EPISODE]->(e:Episode)-[:HAS_BILL]->(b:Bill)
+    RETURN p.id_patient AS idpatient, p.patient_fname AS patient_fname, p.patient_lname AS patient_lname, SUM(b.total) AS sum_total_bill
+    ORDER BY sum_total_bill DESC    
+    """
+    result = neo4j.run(query)
+    neo4j_results = []
+    for record in result:
+        neo4j_results.append({
+            'idpatient': record['idpatient'],
+            'patient_fname': record['patient_fname'],
+            'patient_lname': record['patient_lname'],
+            'sum_total_bill': record['sum_total_bill']
+        })
+    return neo4j_results
+
 if __name__ == "__main__":
     run_query1_neo4j()
