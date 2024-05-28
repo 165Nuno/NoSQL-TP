@@ -7,20 +7,27 @@ password = "12345678"
 
 neo4j = Graph(uri, auth=(user, password))
 
-query = """
+print("Conexão Neo4j realizada com sucesso!")
+
+def run_query1_neo4j():
+    query = """
     MATCH (p:Patient)-[r:HAS_EMERGENCY_CONTACT]->(ec:Emergency_Contact)
     RETURN p.id_patient AS idpatient, p.patient_fname AS patient_fname, p.patient_lname AS patient_lname, 
        ec.contact_name AS contact_name, ec.phone AS phone, ec.relation AS relation
     ORDER BY p.id_patient ASC
     """
-result = neo4j.run(query)
+    result = neo4j.run(query)
+    neo4j_results = []
+    for record in result:
+        neo4j_results.append({
+            'idpatient': record['idpatient'],
+            'patient_fname': record['patient_fname'],
+            'patient_lname': record['patient_lname'],
+            'contact_name': record['contact_name'],
+            'phone': record['phone'],
+            'relation': record['relation']
+        })
+    return neo4j_results
 
-table = PrettyTable()
-table.field_names = ["Patient ID", "First Name", "Last Name", "Contact Name", "Phone", "Relation"]
-
-for record in result:
-    table.add_row([record['idpatient'], record['patient_fname'], record['patient_lname'], 
-                   record['contact_name'], record['phone'], record['relation']])
-
-print(table)
-
+if __name__ == "__main__":
+    run_query1_neo4j()
