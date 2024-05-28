@@ -287,45 +287,24 @@ ORDER BY
         })
     return results
 
+# Query to Get Patients with the Most Appointments
 def run_query11_sql():
     sql_query = """
-    SELECT p.idpatient, p.patient_fname, p.patient_lname, ec.contact_name, ec.phone, ec.relation
-    FROM SYSTEM.patient p
-    JOIN SYSTEM.emergency_contact ec ON p.idpatient = ec.idpatient
-    ORDER BY p.idpatient ASC
-    """
-    cursor = oracle_connection.cursor()
-    cursor.execute(sql_query)
-    results = []
-    for row in cursor:
-        results.append({
-            'idpatient': row[0],
-            'patient_fname': row[1],
-            'patient_lname': row[2],
-            'contact_name': row[3],
-            'phone': row[4],
-            'relation': row[5]
-        })
-    return results
-
-# Query to Get Patients with the Most Appointments
-def run_query12_sql():
-    sql_query = """
-    SELECT 
-        p.idpatient, 
-        p.patient_fname, 
-        p.patient_lname, 
-        COUNT(a.iddoctor) AS appointment_count
-    FROM 
-        SYSTEM.patient p
-    JOIN
-        SYSTEM.episode e ON p.idpatient = e.patient_idpatient
-    JOIN 
-        SYSTEM.appointment a ON e.idepisode = a.idepisode
-    GROUP BY 
-        p.idpatient, p.patient_fname, p.patient_lname
-    ORDER BY 
-        appointment_count DESC
+SELECT 
+    p.idpatient, 
+    p.patient_fname, 
+    p.patient_lname, 
+    COUNT(a.iddoctor) AS appointment_count
+FROM 
+    SYSTEM.patient p
+JOIN
+    SYSTEM.episode e ON p.idpatient = e.patient_idpatient
+JOIN 
+    SYSTEM.appointment a ON e.idepisode = a.idepisode
+GROUP BY 
+    p.idpatient, p.patient_fname, p.patient_lname
+ORDER BY 
+    appointment_count DESC
     """
     cursor = oracle_connection.cursor()
     cursor.execute(sql_query)
@@ -340,23 +319,23 @@ def run_query12_sql():
     return results
 
 # Query to Get Total Bill Cost per Patient, ordered
-def run_query13_sql():
+def run_query12_sql():
     sql_query = """
-    SELECT
-        p.idpatient,
-        p.patient_fname,
-        p.patient_lname,
-        SUM(b.total) as sum_total_bill
-    FROM
-        SYSTEM.patient p
-    JOIN
-        SYSTEM.episode e ON p.idpatient = e.patient_idpatient
-    JOIN
-        SYSTEM.bill b ON e.idepisode = b.idepisode
-    GROUP BY
-        p.idpatient, p.patient_fname, p.patient_lname
-    ORDER BY
-        sum_total_bill DESC
+SELECT
+    p.idpatient,
+    p.patient_fname,
+    p.patient_lname,
+    SUM(b.total) as sum_total_bill
+FROM
+    SYSTEM.patient p
+JOIN
+    SYSTEM.episode e ON p.idpatient = e.patient_idpatient
+JOIN
+    SYSTEM.bill b ON e.idepisode = b.idepisode
+GROUP BY
+    p.idpatient, p.patient_fname, p.patient_lname
+ORDER BY
+    sum_total_bill DESC
     """
     cursor = oracle_connection.cursor()
     cursor.execute(sql_query)
@@ -371,12 +350,12 @@ def run_query13_sql():
     return results
 
 # Query to get average hospitalization stay
-def run_query14_sql():
+def run_query13_sql():
     sql_query = """
-    SELECT
-        ROUND(AVG(h.discharge_date - h.admission_date), 2) AS average_length_of_stay
-    FROM
-        SYSTEM.hospitalization h    
+SELECT
+    ROUND(AVG(h.discharge_date - h.admission_date), 2) AS average_length_of_stay
+FROM
+    SYSTEM.hospitalization h    
     """
     cursor = oracle_connection.cursor()
     cursor.execute(sql_query)

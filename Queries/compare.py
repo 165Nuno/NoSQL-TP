@@ -137,11 +137,6 @@ def compare_query13(print_results=False):
     sql_results = run_query13_sql()
     compare_queries("Query 13", neo4j_results, sql_results, print_results)
 
-def compare_query14(print_results=False):
-    neo4j_results = run_query14_neo4j()
-    sql_results = run_query14_sql()
-    compare_queries("Query 14", neo4j_results, sql_results, print_results)
-
 if __name__ == "__main__":
     compare_query1()
     compare_query2()
@@ -156,4 +151,3 @@ if __name__ == "__main__":
     compare_query11()
     compare_query12()
     compare_query13()
-    compare_query14()

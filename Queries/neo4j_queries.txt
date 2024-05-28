@@ -68,3 +68,21 @@ OPTIONAL MATCH (r)<-[:HAS_ROOM]-(h:Hospitalization)
 RETURN r.id_room AS room_id, r.room_type AS room_type, COUNT(h) AS hospitalization_count
 ORDER BY hospitalization_count DESC, room_id ASC
 
+QUERY 11 -- Get Patients with the Most Appointments
+
+MATCH (p:Patient)-[:HAS_EPISODE]->(e:Episode)-[:HAS_APPOINTMENT]->(a:Appointment)
+RETURN p.id_patient AS idpatient, p.patient_fname AS patient_fname, p.patient_lname AS patient_lname, COUNT(a) AS appointment_count
+ORDER BY appointment_count DESC
+
+
+QUERY 12 -- Get Total Bill Cost per Patient, ordered
+
+MATCH (p:Patient)-[:HAS_EPISODE]->(e:Episode)-[:HAS_BILL]->(b:Bill)
+RETURN p.id_patient AS idpatient, p.patient_fname AS patient_fname, p.patient_lname AS patient_lname, SUM(b.total) AS sum_total_bill
+ORDER BY sum_total_bill DESC  
+
+
+QUERY 13 -- Get average hospitalization stay
+
+MATCH (h:Hospitalization)
+RETURN ROUND(AVG(TOFLOAT(duration.inDays(h.admission_date, h.discharge_date).days)), 2) as avg_hospitalization_stay

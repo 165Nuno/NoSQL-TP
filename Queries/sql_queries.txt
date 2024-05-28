@@ -157,3 +157,51 @@ GROUP BY
     r.idroom, r.room_type
 ORDER BY 
     hospitalization_count DESC, room_id ASC
+
+
+QUERY 11 -- Get Patients with the Most Appointments
+
+SELECT 
+    p.idpatient, 
+    p.patient_fname, 
+    p.patient_lname, 
+    COUNT(a.iddoctor) AS appointment_count
+FROM 
+    SYSTEM.patient p
+JOIN
+    SYSTEM.episode e ON p.idpatient = e.patient_idpatient
+JOIN 
+    SYSTEM.appointment a ON e.idepisode = a.idepisode
+GROUP BY 
+    p.idpatient, p.patient_fname, p.patient_lname
+ORDER BY 
+    appointment_count DESC
+    
+
+QUERY 12 -- Get Total Bill Cost per Patient, ordered
+
+SELECT
+    p.idpatient,
+    p.patient_fname,
+    p.patient_lname,
+    SUM(b.total) as sum_total_bill
+FROM
+    SYSTEM.patient p
+JOIN
+    SYSTEM.episode e ON p.idpatient = e.patient_idpatient
+JOIN
+    SYSTEM.bill b ON e.idepisode = b.idepisode
+GROUP BY
+    p.idpatient, p.patient_fname, p.patient_lname
+ORDER BY
+    sum_total_bill DESC
+
+
+QUERY 13 -- Get average hospitalization stay
+
+SELECT
+    ROUND(AVG(h.discharge_date - h.admission_date), 2) AS average_length_of_stay
+FROM
+    SYSTEM.hospitalization h   
+
+    
