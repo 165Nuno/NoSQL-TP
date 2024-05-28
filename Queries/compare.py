@@ -1,12 +1,9 @@
 from prettytable import PrettyTable
 
-from neo4j import run_query1_neo4j
-from sql import run_query1_sql
+from neo4j import run_query1_neo4j, run_query2_neo4j
+from sql import run_query1_sql, run_query2_sql
 
-def compare_query1():
-    neo4j_results = run_query1_neo4j()
-    sql_results = run_query1_sql()
-    
+def compare_queries(query_name: str, neo4j_results, sql_results):
     # Convert lists of dictionaries to sets of tuples
     neo4j_set = {tuple(d.items()) for d in neo4j_results}
     sql_set = {tuple(d.items()) for d in sql_results}
@@ -16,7 +13,7 @@ def compare_query1():
 
     # Print the comparison result
     table = PrettyTable()
-    table.field_names = ["Comparison Result Query1"]
+    table.field_names = [f"Comparison Result {query_name}"]
     table.add_row(["Equal" if match else "Not Equal"])
     print(table)
 
@@ -47,5 +44,16 @@ def compare_query1():
             print("Different table sql:")
             print(diff_table_sql)
 
+def compare_query1():
+    neo4j_results = run_query1_neo4j()
+    sql_results = run_query1_sql()
+    compare_queries("Query 1", neo4j_results, sql_results)
+
+def compare_query2():
+    neo4j_results = run_query2_neo4j()
+    sql_results = run_query2_sql()
+    compare_queries("Query 2", neo4j_results, sql_results)
+
 if __name__ == "__main__":
     compare_query1()
+    compare_query2()

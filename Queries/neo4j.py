@@ -29,5 +29,23 @@ def run_query1_neo4j():
         })
     return neo4j_results
 
+# Query to Get Patients with the Most Appointments
+def run_query2_neo4j():
+    query = """
+    MATCH (p:Patient)-[:HAS_EPISODE]->(e:Episode)-[:HAS_APPOINTMENT]->(a:Appointment)
+    RETURN p.id_patient AS idpatient, p.patient_fname AS patient_fname, p.patient_lname AS patient_lname, COUNT(a) AS appointment_count
+    ORDER BY appointment_count DESC
+    """
+    result = neo4j.run(query)
+    neo4j_results = []
+    for record in result:
+        neo4j_results.append({
+            'idpatient': record['idpatient'],
+            'patient_fname': record['patient_fname'],
+            'patient_lname': record['patient_lname'],
+            'appointment_count': record['appointment_count']
+        })
+    return neo4j_results
+
 if __name__ == "__main__":
     run_query1_neo4j()

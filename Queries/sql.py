@@ -14,9 +14,9 @@ def run_query1_sql():
     """
     cursor = oracle_connection.cursor()
     cursor.execute(sql_query)
-    sql_results = []
+    results = []
     for row in cursor:
-        sql_results.append({
+        results.append({
             'idpatient': row[0],
             'patient_fname': row[1],
             'patient_lname': row[2],
@@ -24,7 +24,38 @@ def run_query1_sql():
             'phone': row[4],
             'relation': row[5]
         })
-    return sql_results
+    return results
+
+# Query to Get Patients with the Most Appointments
+def run_query2_sql():
+    sql_query = """
+    SELECT 
+        p.idpatient, 
+        p.patient_fname, 
+        p.patient_lname, 
+        COUNT(a.iddoctor) AS appointment_count
+    FROM 
+        SYSTEM.patient p
+    JOIN
+        SYSTEM.episode e ON p.idpatient = e.patient_idpatient
+    JOIN 
+        SYSTEM.appointment a ON e.idepisode = a.idepisode
+    GROUP BY 
+        p.idpatient, p.patient_fname, p.patient_lname
+    ORDER BY 
+        appointment_count DESC
+    """
+    cursor = oracle_connection.cursor()
+    cursor.execute(sql_query)
+    results = []
+    for row in cursor:
+        results.append({
+            'idpatient': row[0],
+            'patient_fname': row[1],
+            'patient_lname': row[2],
+            'appointment_count': row[3]
+        })
+    return results
 
 if __name__ == "__main__":
     run_query1_sql()
