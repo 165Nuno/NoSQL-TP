@@ -7,6 +7,60 @@ print("Conexão Oracle realizada com sucesso!")
 
 def run_query1_sql():
     sql_query = """
+    SELECT 
+        idmedicine AS id, 
+        m_name AS name, 
+        m_cost AS cost
+    FROM 
+        SYSTEM.medicine
+    ORDER BY 
+        m_cost DESC,
+        idmedicine ASC
+    """
+    cursor = oracle_connection.cursor()
+    cursor.execute(sql_query)
+    results = []
+    for row in cursor:
+        results.append({
+            'id': row[0],
+            'name': row[1],
+            'cost': row[2]
+        })
+    return results
+
+def run_query2_sql():
+    sql_query = """
+SELECT 
+    p.idpatient AS id_patient, 
+    p.patient_fname AS patient_fname, 
+    p.patient_lname AS patient_lname, 
+    COUNT(e.idepisode) AS episode_count
+FROM 
+    SYSTEM.patient p
+JOIN 
+    SYSTEM.episode e ON p.idpatient = e.patient_idpatient
+GROUP BY 
+    p.idpatient, p.patient_fname, p.patient_lname
+HAVING 
+    COUNT(e.idepisode) > 3
+ORDER BY 
+    episode_count DESC, 
+    p.idpatient ASC
+    """
+    cursor = oracle_connection.cursor()
+    cursor.execute(sql_query)
+    results = []
+    for row in cursor:
+        results.append({
+            'id_patient': row[0],
+            'patient_fname': row[1],
+            'patient_lname': row[2],
+            'episode_count': row[3]
+        })
+    return results
+
+def run_query11_sql():
+    sql_query = """
     SELECT p.idpatient, p.patient_fname, p.patient_lname, ec.contact_name, ec.phone, ec.relation
     FROM SYSTEM.patient p
     JOIN SYSTEM.emergency_contact ec ON p.idpatient = ec.idpatient
@@ -27,7 +81,7 @@ def run_query1_sql():
     return results
 
 # Query to Get Patients with the Most Appointments
-def run_query2_sql():
+def run_query12_sql():
     sql_query = """
     SELECT 
         p.idpatient, 
@@ -58,7 +112,7 @@ def run_query2_sql():
     return results
 
 # Query to Get Total Bill Cost per Patient, ordered
-def run_query3_sql():
+def run_query13_sql():
     sql_query = """
     SELECT
         p.idpatient,
@@ -89,7 +143,7 @@ def run_query3_sql():
     return results
 
 # Query to get average hospitalization stay
-def run_query4_sql():
+def run_query14_sql():
     sql_query = """
     SELECT
         ROUND(AVG(h.discharge_date - h.admission_date), 2) AS average_length_of_stay
@@ -106,4 +160,4 @@ def run_query4_sql():
     return results
 
 if __name__ == "__main__":
-    run_query1_sql()
+    run_query11_sql()

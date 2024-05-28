@@ -1,7 +1,7 @@
 from prettytable import PrettyTable
 
-from neo4j import run_query1_neo4j, run_query2_neo4j, run_query3_neo4j, run_query4_neo4j
-from sql import run_query1_sql, run_query2_sql, run_query3_sql, run_query4_sql
+from neo4j import *
+from sql import *
 
 def compare_queries(query_name: str, neo4j_results, sql_results, print_results=False):
     # Convert lists of dictionaries to sets of tuples
@@ -76,24 +76,36 @@ def compare_query1(print_results=False):
     sql_results = run_query1_sql()
     compare_queries("Query 1", neo4j_results, sql_results, print_results)
 
-# Compares Query to Get Patients with the Most Appointments
 def compare_query2(print_results=False):
     neo4j_results = run_query2_neo4j()
     sql_results = run_query2_sql()
     compare_queries("Query 2", neo4j_results, sql_results, print_results)
 
-def compare_query3(print_results=False):
-    neo4j_results = run_query3_neo4j()
-    sql_results = run_query3_sql()
-    compare_queries("Query 3", neo4j_results, sql_results, print_results)
+def compare_query11(print_results=False):
+    neo4j_results = run_query11_neo4j()
+    sql_results = run_query11_sql()
+    compare_queries("Query 11", neo4j_results, sql_results, print_results)
 
-def compare_query4(print_results=False):
-    neo4j_results = run_query4_neo4j()
-    sql_results = run_query4_sql()
-    compare_queries("Query 4", neo4j_results, sql_results, print_results)
+# Compares Query to Get Patients with the Most Appointments
+def compare_query12(print_results=False):
+    neo4j_results = run_query12_neo4j()
+    sql_results = run_query12_sql()
+    compare_queries("Query 12", neo4j_results, sql_results, print_results)
+
+def compare_query13(print_results=False):
+    neo4j_results = run_query13_neo4j()
+    sql_results = run_query13_sql()
+    compare_queries("Query 13", neo4j_results, sql_results, print_results)
+
+def compare_query14(print_results=False):
+    neo4j_results = run_query14_neo4j()
+    sql_results = run_query14_sql()
+    compare_queries("Query 14", neo4j_results, sql_results, print_results)
 
 if __name__ == "__main__":
     compare_query1()
     compare_query2()
-    compare_query3()
-    compare_query4()
+    compare_query11()
+    compare_query12()
+    compare_query13()
+    compare_query14()

@@ -11,6 +11,41 @@ print("Conexão Neo4j realizada com sucesso!")
 
 def run_query1_neo4j():
     query = """
+    MATCH (m:Medicine)
+    RETURN m.id_medicine AS id, m.m_name AS name, m.m_cost AS cost
+    ORDER BY m.m_cost DESC
+    """
+    result = neo4j.run(query)
+    neo4j_results = []
+    for record in result:
+        neo4j_results.append({
+            'id': record['id'],
+            'name': record['name'],
+            'cost': record['cost']
+        })
+    return neo4j_results
+
+def run_query2_neo4j():
+    query = """
+MATCH (p:Patient)-[:HAS_EPISODE]->(e:Episode)
+WITH p, COUNT(e) AS episode_count
+WHERE episode_count > 3
+RETURN p.id_patient AS id_patient, p.patient_fname AS patient_fname, p.patient_lname AS patient_lname, episode_count
+ORDER BY episode_count DESC, id_patient ASC
+    """
+    result = neo4j.run(query)
+    neo4j_results = []
+    for record in result:
+        neo4j_results.append({
+            'id_patient': record['id_patient'],
+            'patient_fname': record['patient_fname'],
+            'patient_lname': record['patient_lname'],
+            'episode_count': record['episode_count']
+        })
+    return neo4j_results
+
+def run_query11_neo4j():
+    query = """
     MATCH (p:Patient)-[r:HAS_EMERGENCY_CONTACT]->(ec:Emergency_Contact)
     RETURN p.id_patient AS idpatient, p.patient_fname AS patient_fname, p.patient_lname AS patient_lname, 
        ec.contact_name AS contact_name, ec.phone AS phone, ec.relation AS relation
@@ -30,7 +65,7 @@ def run_query1_neo4j():
     return neo4j_results
 
 # Query to Get Patients with the Most Appointments
-def run_query2_neo4j():
+def run_query12_neo4j():
     query = """
     MATCH (p:Patient)-[:HAS_EPISODE]->(e:Episode)-[:HAS_APPOINTMENT]->(a:Appointment)
     RETURN p.id_patient AS idpatient, p.patient_fname AS patient_fname, p.patient_lname AS patient_lname, COUNT(a) AS appointment_count
@@ -48,7 +83,7 @@ def run_query2_neo4j():
     return neo4j_results
 
 # Query to Get Total Bill Cost per Patient, ordered
-def run_query3_neo4j():
+def run_query13_neo4j():
     query = """
     MATCH (p:Patient)-[:HAS_EPISODE]->(e:Episode)-[:HAS_BILL]->(b:Bill)
     RETURN p.id_patient AS idpatient, p.patient_fname AS patient_fname, p.patient_lname AS patient_lname, SUM(b.total) AS sum_total_bill
@@ -66,7 +101,7 @@ def run_query3_neo4j():
     return neo4j_results
 
 # Query to get average hospitalization stay
-def run_query4_neo4j():
+def run_query14_neo4j():
     query = """
     MATCH (h:Hospitalization)
     RETURN ROUND(AVG(TOFLOAT(duration.inDays(h.admission_date, h.discharge_date).days)), 2) as avg_hospitalization_stay
@@ -80,4 +115,4 @@ def run_query4_neo4j():
     return neo4j_results
 
 if __name__ == "__main__":
-    run_query1_neo4j()
+    run_query11_neo4j()
