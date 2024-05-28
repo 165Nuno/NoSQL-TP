@@ -47,6 +47,7 @@ def run_query2_neo4j():
         })
     return neo4j_results
 
+# Query to Get Total Bill Cost per Patient, ordered
 def run_query3_neo4j():
     query = """
     MATCH (p:Patient)-[:HAS_EPISODE]->(e:Episode)-[:HAS_BILL]->(b:Bill)
@@ -61,6 +62,20 @@ def run_query3_neo4j():
             'patient_fname': record['patient_fname'],
             'patient_lname': record['patient_lname'],
             'sum_total_bill': record['sum_total_bill']
+        })
+    return neo4j_results
+
+# Query to get average hospitalization stay
+def run_query4_neo4j():
+    query = """
+    MATCH (h:Hospitalization)
+    RETURN ROUND(AVG(TOFLOAT(duration.inDays(h.admission_date, h.discharge_date).days)), 2) as avg_hospitalization_stay
+    """
+    result = neo4j.run(query)
+    neo4j_results = []
+    for record in result:
+        neo4j_results.append({
+            'avg_hospitalization_stay': record['avg_hospitalization_stay']
         })
     return neo4j_results
 

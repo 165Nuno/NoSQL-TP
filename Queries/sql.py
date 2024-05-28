@@ -57,6 +57,7 @@ def run_query2_sql():
         })
     return results
 
+# Query to Get Total Bill Cost per Patient, ordered
 def run_query3_sql():
     sql_query = """
     SELECT
@@ -87,6 +88,22 @@ def run_query3_sql():
         })
     return results
 
+# Query to get average hospitalization stay
+def run_query4_sql():
+    sql_query = """
+    SELECT
+        ROUND(AVG(h.discharge_date - h.admission_date), 2) AS average_length_of_stay
+    FROM
+        SYSTEM.hospitalization h    
+    """
+    cursor = oracle_connection.cursor()
+    cursor.execute(sql_query)
+    results = []
+    for row in cursor:
+        results.append({
+            "avg_hospitalization_stay": row[0]
+        })
+    return results
 
 if __name__ == "__main__":
     run_query1_sql()

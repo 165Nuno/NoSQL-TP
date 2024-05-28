@@ -1,7 +1,7 @@
 from prettytable import PrettyTable
 
-from neo4j import run_query1_neo4j, run_query2_neo4j, run_query3_neo4j
-from sql import run_query1_sql, run_query2_sql, run_query3_sql
+from neo4j import run_query1_neo4j, run_query2_neo4j, run_query3_neo4j, run_query4_neo4j
+from sql import run_query1_sql, run_query2_sql, run_query3_sql, run_query4_sql
 
 def compare_queries(query_name: str, neo4j_results, sql_results, print_results=False):
     # Convert lists of dictionaries to sets of tuples
@@ -71,8 +71,6 @@ def compare_queries(query_name: str, neo4j_results, sql_results, print_results=F
         print(results_table_neo4j)
 
 
-
-
 def compare_query1(print_results=False):
     neo4j_results = run_query1_neo4j()
     sql_results = run_query1_sql()
@@ -89,7 +87,13 @@ def compare_query3(print_results=False):
     sql_results = run_query3_sql()
     compare_queries("Query 3", neo4j_results, sql_results, print_results)
 
+def compare_query4(print_results=False):
+    neo4j_results = run_query4_neo4j()
+    sql_results = run_query4_sql()
+    compare_queries("Query 4", neo4j_results, sql_results, print_results)
+
 if __name__ == "__main__":
     compare_query1()
     compare_query2()
-    compare_query3(True)
+    compare_query3()
+    compare_query4()
