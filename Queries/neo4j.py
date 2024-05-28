@@ -9,6 +9,7 @@ neo4j = Graph(uri, auth=(user, password))
 
 print("Conexão Neo4j realizada com sucesso!")
 
+# Lista por ordem descrescente os medicamentos mais caros
 def run_query1_neo4j():
     query = """
     MATCH (m:Medicine)
@@ -25,6 +26,7 @@ def run_query1_neo4j():
         })
     return neo4j_results
 
+# Listar pacientes que têm mais de 3 episodes por ordem descrescente
 def run_query2_neo4j():
     query = """
 MATCH (p:Patient)-[:HAS_EPISODE]->(e:Episode)
@@ -41,6 +43,42 @@ ORDER BY episode_count DESC, id_patient ASC
             'patient_fname': record['patient_fname'],
             'patient_lname': record['patient_lname'],
             'episode_count': record['episode_count']
+        })
+    return neo4j_results
+
+# Listar pacientes e as seus contactos de emergência
+def run_query3_neo4j():
+    query = """
+MATCH (p:Patient)-[:HAS_EMERGENCY_CONTACT]->(ec:Emergency_Contact)
+RETURN p.id_patient AS id_patient, p.patient_fname AS patient_fname, p.patient_lname AS patient_lname, ec.contact_name AS contact_name, ec.phone AS phone
+ORDER BY p.id_patient ASC
+    """
+    result = neo4j.run(query)
+    neo4j_results = []
+    for record in result:
+        neo4j_results.append({
+            'id_patient': record['id_patient'],
+            'patient_fname': record['patient_fname'],
+            'patient_lname': record['patient_lname'],
+            'contact_name': record['contact_name'],
+            'phone': record['phone']
+        })
+    return neo4j_results
+
+# Listar as salas com o maior custo de hospitalização total
+def run_query4_neo4j():
+    query = """
+MATCH (r:Room)<-[:HAS_ROOM]-(h:Hospitalization)<-[:HAS_HOSPITALIZATION]-(e:Episode)-[:HAS_BILL]->(b:Bill)
+RETURN r.id_room AS room_id, r.room_type AS room_type, SUM(b.total) AS total_cost
+ORDER BY total_cost DESC
+    """
+    result = neo4j.run(query)
+    neo4j_results = []
+    for record in result:
+        neo4j_results.append({
+            'room_id': record['room_id'],
+            'room_type': record['room_type'],
+            'total_cost': record['total_cost']
         })
     return neo4j_results
 

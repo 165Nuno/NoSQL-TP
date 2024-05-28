@@ -5,6 +5,7 @@ oracle_connection = oracledb.connect(user="sys", password="password",
                               dsn="localhost:1521/xe", mode=oracledb.SYSDBA)
 print("Conexão Oracle realizada com sucesso!")
 
+# Lista por ordem descrescente os medicamentos mais caros
 def run_query1_sql():
     sql_query = """
     SELECT 
@@ -28,6 +29,7 @@ def run_query1_sql():
         })
     return results
 
+# Listar pacientes que têm mais de 3 episodes por ordem descrescente
 def run_query2_sql():
     sql_query = """
 SELECT 
@@ -56,6 +58,68 @@ ORDER BY
             'patient_fname': row[1],
             'patient_lname': row[2],
             'episode_count': row[3]
+        })
+    return results
+
+# Listar pacientes e as seus contactos de emergência
+def run_query3_sql():
+    sql_query = """
+SELECT 
+    p.idpatient AS id_patient, 
+    p.patient_fname AS patient_fname, 
+    p.patient_lname AS patient_lname, 
+    ec.contact_name AS contact_name, 
+    ec.phone AS phone
+FROM 
+    SYSTEM.patient p
+JOIN 
+    SYSTEM.emergency_contact ec ON p.idpatient = ec.idpatient
+ORDER BY 
+    id_patient ASC
+    """
+    cursor = oracle_connection.cursor()
+    cursor.execute(sql_query)
+    results = []
+    for row in cursor:
+        results.append({
+            'id_patient': row[0],
+            'patient_fname': row[1],
+            'patient_lname': row[2],
+            'contact_name': row[3],
+            'phone': row[4]
+        })
+    return results
+
+# Listar as salas com o maior custo de hospitalização total
+def run_query4_sql():
+    sql_query = """
+SELECT 
+    r.idroom AS room_id, 
+    r.room_type AS room_type, 
+    SUM(b.total) AS total_cost
+FROM 
+    SYSTEM.room r
+LEFT JOIN 
+    SYSTEM.hospitalization h ON r.idroom = h.room_idroom
+LEFT JOIN 
+    SYSTEM.episode e ON h.idepisode = e.idepisode
+LEFT JOIN 
+    SYSTEM.bill b ON e.idepisode = b.idepisode
+GROUP BY 
+    r.idroom, r.room_type
+HAVING 
+    SUM(b.total) IS NOT NULL  -- É para remover os quatros que não tiveram custos
+ORDER BY 
+    total_cost DESC
+    """
+    cursor = oracle_connection.cursor()
+    cursor.execute(sql_query)
+    results = []
+    for row in cursor:
+        results.append({
+            'room_id': row[0],
+            'room_type': row[1],
+            'total_cost': row[2],
         })
     return results
 
