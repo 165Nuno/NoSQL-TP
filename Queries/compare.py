@@ -27,6 +27,7 @@ def compare_queries(query_name: str, neo4j_results, sql_results, print_results=F
             diff_table_neo4j = PrettyTable()
             diff_table_neo4j.title = "Different table Neo4j"
             neo4j_columns = list(neo4j_results[0].keys())
+            print(type(neo4j_results[0]['unique_patient_count']))
             diff_table_neo4j.field_names = ["Source"] + neo4j_columns
             for entry in neo4j_only:
                 entry_dict = dict(entry)
@@ -39,6 +40,7 @@ def compare_queries(query_name: str, neo4j_results, sql_results, print_results=F
             diff_table_sql.title = "Different table Sql"
             diff_table_sql.field_names = ["Source"] + list(sql_results[0].keys())
             sql_columns = list(sql_results[0].keys())
+            print(type(sql_results[0]['unique_patient_count']))
             for entry in sql_only:
                 entry_dict = dict(entry)
                 row = ["SQL"] + [entry_dict[col] for col in sql_columns]
@@ -91,6 +93,21 @@ def compare_query4(print_results=False):
     sql_results = run_query4_sql()
     compare_queries("Query 4", neo4j_results, sql_results, print_results)
 
+def compare_query5(print_results=False):
+    neo4j_results = run_query5_neo4j()
+    sql_results = run_query5_sql()
+    compare_queries("Query 5", neo4j_results, sql_results, print_results)
+
+def compare_query6(print_results=False):
+    neo4j_results = run_query6_neo4j()
+    sql_results = run_query6_sql()
+    compare_queries("Query 6", neo4j_results, sql_results, print_results)
+
+def compare_query7(print_results=False):
+    neo4j_results = run_query7_neo4j()
+    sql_results = run_query7_sql()
+    compare_queries("Query 7", neo4j_results, sql_results, print_results)
+
 def compare_query11(print_results=False):
     neo4j_results = run_query11_neo4j()
     sql_results = run_query11_sql()
@@ -117,6 +134,9 @@ if __name__ == "__main__":
     compare_query2()
     compare_query3()
     compare_query4()
+    compare_query5()
+    compare_query6()
+    compare_query7()
     compare_query11()
     compare_query12()
     compare_query13()

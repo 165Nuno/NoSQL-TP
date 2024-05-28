@@ -123,6 +123,83 @@ ORDER BY
         })
     return results
 
+# Contar o número de pacientes únicos por tipo de sala
+def run_query5_sql():
+    sql_query = """
+SELECT 
+    r.room_type AS room_type, 
+    COUNT(DISTINCT p.idpatient) AS unique_patient_count
+FROM 
+    SYSTEM.room r
+JOIN 
+    SYSTEM.hospitalization h ON r.idroom = h.room_idroom
+JOIN 
+    SYSTEM.episode e ON h.idepisode = e.idepisode
+JOIN 
+    SYSTEM.patient p ON e.patient_idpatient = p.idpatient
+GROUP BY 
+    r.room_type
+ORDER BY 
+    unique_patient_count DESC
+    """
+    cursor = oracle_connection.cursor()
+    cursor.execute(sql_query)
+    results = []
+    for row in cursor:
+        results.append({
+            'room_type': row[0],
+            'unique_patient_count': row[1]
+        })
+    return results
+
+# Listar os tipos de sala e o custo médio por tipo
+def run_query6_sql():
+    sql_query = """
+SELECT 
+    r.room_type AS room_type, 
+    AVG(r.room_cost) AS average_cost
+FROM 
+    SYSTEM.room r
+GROUP BY 
+    r.room_type
+ORDER BY 
+    average_cost DESC
+    """
+    cursor = oracle_connection.cursor()
+    cursor.execute(sql_query)
+    results = []
+    for row in cursor:
+        results.append({
+            'room_type': row[0],
+            'average_cost': row[1]
+        })
+    return results
+
+# Contar o número de funcionários por departamento, ordenado pelo número de funcionários
+def run_query7_sql():
+    sql_query = """
+SELECT 
+    d.dept_name AS department_name, 
+    COUNT(s.emp_id) AS staff_count
+FROM 
+    SYSTEM.staff s
+JOIN 
+    SYSTEM.department d ON s.iddepartment = d.iddepartment
+GROUP BY 
+    d.dept_name
+ORDER BY 
+    staff_count DESC
+    """
+    cursor = oracle_connection.cursor()
+    cursor.execute(sql_query)
+    results = []
+    for row in cursor:
+        results.append({
+            'department_name': row[0],
+            'staff_count': row[1]
+        })
+    return results
+
 def run_query11_sql():
     sql_query = """
     SELECT p.idpatient, p.patient_fname, p.patient_lname, ec.contact_name, ec.phone, ec.relation

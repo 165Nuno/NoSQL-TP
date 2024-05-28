@@ -82,6 +82,54 @@ ORDER BY total_cost DESC
         })
     return neo4j_results
 
+# Contar o número de pacientes únicos por tipo de sala
+def run_query5_neo4j():
+    query = """
+MATCH (r:Room)<-[:HAS_ROOM]-(h:Hospitalization)<-[:HAS_HOSPITALIZATION]-(e:Episode)<-[:HAS_EPISODE]-(p:Patient)
+RETURN r.room_type AS room_type, COUNT(DISTINCT p.id_patient) AS unique_patient_count
+ORDER BY unique_patient_count DESC
+    """
+    result = neo4j.run(query)
+    neo4j_results = []
+    for record in result:
+        neo4j_results.append({
+            'room_type': record['room_type'],
+            'unique_patient_count': record['unique_patient_count']
+        })
+    return neo4j_results
+
+# Listar os tipos de sala e o custo médio por tipo
+def run_query6_neo4j():
+    query = """
+MATCH (r:Room)
+RETURN r.room_type AS room_type, AVG(r.room_cost) AS average_cost
+ORDER BY average_cost DESC
+    """
+    result = neo4j.run(query)
+    neo4j_results = []
+    for record in result:
+        neo4j_results.append({
+            'room_type': record['room_type'],
+            'average_cost': record['average_cost']
+        })
+    return neo4j_results
+
+# Contar o número de funcionários por departamento, ordenado pelo número de funcionários
+def run_query7_neo4j():
+    query = """
+MATCH (s:Staff)-[:WORKS_IN_DEPARTMENT]->(d:Department)
+RETURN d.dept_name AS department_name, COUNT(s) AS staff_count
+ORDER BY staff_count DESC
+    """
+    result = neo4j.run(query)
+    neo4j_results = []
+    for record in result:
+        neo4j_results.append({
+            'department_name': record['department_name'],
+            'staff_count': record['staff_count']
+        })
+    return neo4j_results
+
 def run_query11_neo4j():
     query = """
     MATCH (p:Patient)-[r:HAS_EMERGENCY_CONTACT]->(ec:Emergency_Contact)
