@@ -1,0 +1,159 @@
+-- QUERY 1 -- Lista por ordem descrescente os medicamentos mais caros
+
+SELECT 
+    idmedicine AS id, 
+    m_name AS name, 
+    m_cost AS cost
+FROM 
+    medicine
+ORDER BY 
+    m_cost DESC,
+    idmedicine ASC;
+
+-- QUERY 2 -- Listar pacientes que têm mais de 3 episodes por ordem descrescente
+
+SELECT 
+    p.idpatient AS id_patient, 
+    p.patient_fname AS patient_fname, 
+    p.patient_lname AS patient_lname, 
+    COUNT(e.idepisode) AS episode_count
+FROM 
+    patient p
+JOIN 
+    episode e ON p.idpatient = e.patient_idpatient
+GROUP BY 
+    p.idpatient, p.patient_fname, p.patient_lname
+HAVING 
+    COUNT(e.idepisode) > 3
+ORDER BY 
+    episode_count DESC, 
+    p.idpatient ASC;
+
+-- QUERY 3 -- Listar pacientes e as seus contactos de emergência
+
+SELECT 
+    p.idpatient, 
+    p.patient_fname, 
+    p.patient_lname, 
+    ec.contact_name, 
+    ec.phone
+FROM 
+    patient p
+JOIN 
+    emergency_contact ec ON p.idpatient = ec.idpatient
+ORDER BY 
+    p.idpatient ASC;    
+
+-- QUERY 4 -- Listar as salas com o maior custo de hospitalização total
+
+SELECT 
+    r.idroom AS room_id, 
+    r.room_type AS room_type, 
+    SUM(b.total) AS total_cost
+FROM 
+    room r
+LEFT JOIN 
+    hospitalization h ON r.idroom = h.room_idroom
+LEFT JOIN 
+    episode e ON h.idepisode = e.idepisode
+LEFT JOIN 
+    bill b ON e.idepisode = b.idepisode
+GROUP BY 
+    r.idroom, r.room_type
+HAVING 
+    SUM(b.total) IS NOT NULL  -- É para remover os quatros que não tiveram custos
+ORDER BY 
+    total_cost DESC;
+
+
+-- QUERY 5 -- Contar o número de pacientes únicos por tipo de sala
+
+SELECT 
+    r.room_type AS room_type, 
+    COUNT(DISTINCT p.idpatient) AS unique_patient_count
+FROM 
+    room r
+JOIN 
+    hospitalization h ON r.idroom = h.room_idroom
+JOIN 
+    episode e ON h.idepisode = e.idepisode
+JOIN 
+    patient p ON e.patient_idpatient = p.idpatient
+GROUP BY 
+    r.room_type
+ORDER BY 
+    unique_patient_count DESC;
+
+-- QUERY 6 -- Listar os tipos de sala e o custo médio por tipo
+
+SELECT 
+    r.room_type AS room_type, 
+    AVG(r.room_cost) AS average_cost
+FROM 
+    room r
+GROUP BY 
+    r.room_type
+ORDER BY 
+    average_cost DESC;
+
+-- QUERY 7 -- Contar o número de funcionários por departamento, ordenado pelo número de funcionários
+
+SELECT 
+    d.dept_name AS department_name, 
+    COUNT(s.emp_id) AS staff_count
+FROM 
+    staff s
+JOIN 
+    department d ON s.iddepartment = d.iddepartment
+GROUP BY 
+    d.dept_name
+ORDER BY 
+    staff_count DESC;
+
+-- QUERY 8 -- O funcionário com mais tempo de serviço ativo
+
+SELECT 
+    s.emp_id AS emp_id, 
+    s.emp_fname AS first_name, 
+    s.emp_lname AS last_name, 
+    (TRUNC((SYSDATE - s.date_joining) / 365.25, 2)) AS years_at_hospital
+FROM 
+    staff s
+WHERE 
+    s.is_active_status = 'Y'
+ORDER BY 
+    (SYSDATE - s.date_joining) DESC
+FETCH FIRST 1 ROWS ONLY;
+
+-- QUERY 9 -- O paciente com mais condições médicas e suas condições
+
+SELECT 
+    p.idpatient AS id_patient, 
+    p.patient_fname AS first_name, 
+    p.patient_lname AS last_name, 
+    COUNT(mh.record_id) AS condition_count,
+    LISTAGG(mh.condition, ', ') WITHIN GROUP (ORDER BY mh.condition) AS conditions
+FROM 
+    patient p
+JOIN 
+    MEDICAL_HISTORY mh ON p.idpatient = mh.idpatient
+GROUP BY 
+    p.idpatient, p.patient_fname, p.patient_lname
+ORDER BY 
+    condition_count DESC
+FETCH FIRST 1 ROWS ONLY;
+
+-- QUERY 10 -- Listar todas as hospitalizações em uma sala específica
+
+SELECT 
+    r.idroom AS room_id, 
+    r.room_type AS room_type, 
+    COUNT(h.idepisode) AS hospitalization_count
+FROM 
+    room r
+LEFT JOIN 
+    hospitalization h ON r.idroom = h.room_idroom
+GROUP BY 
+    r.idroom, r.room_type
+ORDER BY 
+    hospitalization_count DESC, room_id ASC;
