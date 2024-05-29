@@ -182,55 +182,67 @@ try:
         medical_history_query = f"""
             SELECT record_id AS "_id", 
                    condition, 
-                   record_date 
+                   record_date AS record_date 
             FROM MEDICAL_HISTORY 
             WHERE idpatient = {patient['_id']}
         """
         medical_history = fetch_oracle_data(medical_history_query)
         patient['medical_history'] = medical_history
 
-        # Episodes
-        episodes = []
-        appointment_query = f"""
-            SELECT idepisode AS "_id", 
-                   'appointment' AS type, 
-                   scheduled_on, 
-                   appointment_date, 
-                   appointment_time, 
-                   iddoctor AS doctor 
-            FROM appointment 
-            WHERE idepisode IN (SELECT idepisode FROM episode WHERE patient_idpatient = {patient['_id']})
+        # Episodes and Events
+        episodes_query = f"""
+            SELECT idepisode AS "_id" 
+            FROM episode 
+            WHERE patient_idpatient = {patient['_id']}
         """
-        appointment_data = fetch_oracle_data(appointment_query)
-        episodes.extend(appointment_data)
-        
-        hospitalization_query = f"""
-            SELECT idepisode AS "_id", 
-                   'hospitalization' AS type, 
-                   admission_date, 
-                   discharge_date, 
-                   room_idroom AS room, 
-                   responsible_nurse AS nurse 
-            FROM hospitalization 
-            WHERE idepisode IN (SELECT idepisode FROM episode WHERE patient_idpatient = {patient['_id']})
-        """
-        hospitalization_data = fetch_oracle_data(hospitalization_query)
-        episodes.extend(hospitalization_data)
-        
-        lab_screening_query = f"""
-            SELECT episode_idepisode AS "_id", 
-                   'lab_screening' AS type, 
-                   test_cost, 
-                   test_date, 
-                   idtechnician AS technician 
-            FROM lab_screening 
-            WHERE episode_idepisode IN (SELECT idepisode FROM episode WHERE patient_idpatient = {patient['_id']})
-        """
-        lab_screening_data = fetch_oracle_data(lab_screening_query)
-        episodes.extend(lab_screening_data)
-        
-        patient['episodes'] = episodes
+        episodes_data = fetch_oracle_data(episodes_query)
 
+        episodes = []
+        for episode in episodes_data:
+            episode_id = episode['_id']
+
+            # Appointments
+            appointment_query = f"""
+                SELECT 'appointment' AS type, 
+                       scheduled_on, 
+                       appointment_date, 
+                       appointment_time, 
+                       iddoctor AS doctor 
+                FROM appointment 
+                WHERE idepisode = {episode_id}
+            """
+            appointments = fetch_oracle_data(appointment_query)
+
+            # Hospitalizations
+            hospitalization_query = f"""
+                SELECT 'hospitalization' AS type, 
+                       admission_date, 
+                       discharge_date, 
+                       room_idroom AS room, 
+                       responsible_nurse AS nurse 
+                FROM hospitalization 
+                WHERE idepisode = {episode_id}
+            """
+            hospitalizations = fetch_oracle_data(hospitalization_query)
+
+            # Lab Screenings
+            lab_screening_query = f"""
+                SELECT 'lab_screening' AS type, 
+                       test_cost, 
+                       test_date, 
+                       idtechnician AS technician 
+                FROM lab_screening 
+                WHERE episode_idepisode = {episode_id}
+            """
+            lab_screenings = fetch_oracle_data(lab_screening_query)
+
+            events = appointments + hospitalizations + lab_screenings
+            episode['events'] = events
+
+            episodes.append(episode)
+
+        patient['episodes'] = episodes
+        
         # Bills
         patient_bills_query = f"""
             SELECT idbill AS "_id" 
