@@ -1,0 +1,464 @@
+
+        ID NAME                                                COST
+---------- --------------------------------------------- ----------
+         8 Levothyroxine                                         35
+         5 Lisinopril                                            30
+        10 Amlodipine                                            30
+        16 Metoprolol                                            30
+        19 Alprazolam                                            30
+         4 Ciprofloxacin                                         25
+         7 Metformin                                             25
+        12 Losartan                                              25
+        17 Warfarin                                              25
+        20 Hydrocodone                                           25
+         3 Amoxicillin                                           20
+
+        ID NAME                                                COST
+---------- --------------------------------------------- ----------
+         6 Atorvastatin                                          20
+         9 Simvastatin                                           20
+        13 Azithromycin                                          20
+        18 Fluoxetine                                            20
+         2 Ibuprofen                                             15
+        11 Hydrochlorothiazide                                   15
+        15 Prednisone                                            15
+         1 Paracetamol                                           10
+        14 Omeprazole                                            10
+
+20 rows selected. 
+
+
+ID_PATIENT PATIENT_FNAME                                 PATIENT_LNAME                                 EPISODE_COUNT
+---------- --------------------------------------------- --------------------------------------------- -------------
+        30 Amelia                                        Huynh                                                     8
+        10 Emma                                          Perez                                                     4
+        11 Jacob                                         Rodriguez                                                 4
+        12 Isabella                                      Hernandez                                                 4
+        13 Ethan                                         Lopez                                                     4
+        14 Mia                                           Gomez                                                     4
+        85 Scarlett                                      Dang                                                      4
+        86 Ethan                                         Duong                                                     4
+        87 Madison                                       Nguyen                                                    4
+        88 Jacob                                         Lam                                                       4
+        89 Amelia                                        Tran                                                      4
+
+ID_PATIENT PATIENT_FNAME                                 PATIENT_LNAME                                 EPISODE_COUNT
+---------- --------------------------------------------- --------------------------------------------- -------------
+        90 Michael                                       Do                                                        4
+
+12 rows selected. 
+
+
+ID_PATIENT PATIENT_FNAME                                 PATIENT_LNAME                                 CONTACT_NAME                                  PHONE                         
+---------- --------------------------------------------- --------------------------------------------- --------------------------------------------- ------------------------------
+         1 John                                          Doe                                           John Doe                                      111-222-3333                  
+         1 John                                          Doe                                           Emma Thompson                                 111-222-3323                  
+         2 Jane                                          Smith                                         Jane Smith                                    222-333-4444                  
+         3 Michael                                       Johnson                                       Alice Johnson                                 333-444-5555                  
+         4 Emily                                         Brown                                         Bob Brown                                     444-555-6666                  
+         4 Emily                                         Brown                                         Olivia Rodriguez                              333-444-5555                  
+         5 William                                       Martinez                                      Sarah Wilson                                  555-666-7777                  
+         6 Sophia                                        Garcia                                        Michael Clark                                 666-777-8888                  
+         6 Sophia                                        Garcia                                        James Wilson                                  444-555-6666                  
+         7 James                                         Lopez                                         Ava Anderson                                  555-666-7777                  
+         7 James                                         Lopez                                         Emily White                                   777-888-9999                  
+
+ID_PATIENT PATIENT_FNAME                                 PATIENT_LNAME                                 CONTACT_NAME                                  PHONE                         
+---------- --------------------------------------------- --------------------------------------------- --------------------------------------------- ------------------------------
+         7 James                                         Lopez                                         Matthew Evans                                 222-333-4444                  
+         8 Olivia                                        Lee                                           David Lee                                     888-999-0000                  
+         9 Benjamin                                      Gonzalez                                      Jennifer Martinez                             999-000-1111                  
+        10 Emma                                          Perez                                         Daniel Harris                                 000-111-2222                  
+        22 Emma                                          Flores                                        Noah Harris                                   000-111-2222                  
+        44 Aiden                                         Vo                                            Mia Martinez                                  999-000-1111                  
+        55 Isabella                                      Huynh                                         Ethan Lewis                                   888-999-0000                  
+        66 Benjamin                                      Ngo                                           Sophia Scott                                  777-888-9999                  
+        77 Sophia                                        Phan                                          Logan Taylor                                  666-777-8888                  
+
+20 rows selected. 
+
+
+   ROOM_ID ROOM_TYPE                                     TOTAL_COST
+---------- --------------------------------------------- ----------
+        10 Executive                                       13496.36
+        44 Standard                                        11359.58
+        13 Suite                                           11343.57
+        24 Standard                                        10858.01
+         1 Single                                          10203.34
+        11 Single                                          10092.73
+        46 VIP                                                 9275
+        31 Single                                           9129.27
+        35 Deluxe                                              8820
+        25 Deluxe                                              8665
+        38 Family                                           8655.88
+
+   ROOM_ID ROOM_TYPE                                     TOTAL_COST
+---------- --------------------------------------------- ----------
+        19 Penthouse                                        8402.17
+         9 Penthouse                                           8370
+         5 Deluxe                                              7845
+        14 Standard                                          7604.6
+        17 Economy                                             7580
+        27 Economy                                          7422.57
+         3 Suite                                               7350
+        36 VIP                                              7233.35
+        40 Executive                                           6425
+         6 VIP                                                 6330
+        32 Double                                           5886.11
+
+   ROOM_ID ROOM_TYPE                                     TOTAL_COST
+---------- --------------------------------------------- ----------
+        41 Single                                              4700
+         4 Standard                                            4570
+        48 Family                                           4524.49
+        49 Penthouse                                        4120.97
+         2 Double                                              3655
+        43 Suite                                               3360
+        33 Suite                                               3250
+        16 VIP                                                 3200
+        50 Executive                                           3130
+        37 Economy                                          2727.93
+        42 Double                                              2350
+
+   ROOM_ID ROOM_TYPE                                     TOTAL_COST
+---------- --------------------------------------------- ----------
+        18 Family                                              1980
+         7 Economy                                             1980
+        22 Double                                           1720.42
+        20 Executive                                           1720
+        34 Standard                                            1635
+        45 Deluxe                                              1425
+        29 Penthouse                                           1090
+        23 Suite                                               1090
+        26 VIP                                                 1070
+        28 Family                                               690
+        39 Penthouse                                            610
+
+   ROOM_ID ROOM_TYPE                                     TOTAL_COST
+---------- --------------------------------------------- ----------
+        47 Economy                                              580
+         8 Family                                               550
+        12 Double                                               340
+        21 Single                                               260
+
+48 rows selected. 
+
+
+ROOM_TYPE                                     UNIQUE_PATIENT_COUNT
+--------------------------------------------- --------------------
+Penthouse                                                       13
+Economy                                                         12
+Family                                                          12
+Executive                                                       12
+Single                                                           8
+VIP                                                              8
+Double                                                           7
+Deluxe                                                           7
+Standard                                                         6
+Suite                                                            5
+
+10 rows selected. 
+
+
+ROOM_TYPE                                     AVERAGE_COST
+--------------------------------------------- ------------
+Penthouse                                              525
+Executive                                              410
+VIP                                                    310
+Suite                                                  265
+Deluxe                                                 210
+Family                                                 190
+Double                                                 165
+Single                                                 110
+Standard                                                85
+Economy                                                 75
+
+10 rows selected. 
+
+
+DEPARTMENT_NAME                               STAFF_COUNT
+--------------------------------------------- -----------
+Ophthalmology                                           9
+Radiology                                               8
+Dentistry                                               6
+Cardiology_1                                            6
+Psychiatry                                              6
+Rheumatology                                            6
+Endocrinology                                           6
+Hematology                                              6
+Gynecology                                              6
+Emergency_2                                             3
+Diagnostic_1                                            3
+
+DEPARTMENT_NAME                               STAFF_COUNT
+--------------------------------------------- -----------
+Emergency_1                                             3
+Cardiology_4                                            3
+Diagnostic_3                                            3
+Pediatrics                                              2
+Orthopedics                                             2
+Cardiology_2                                            2
+Cardiology_3                                            2
+Dermatology                                             2
+Urology                                                 2
+Oncology                                                2
+Neurology                                               2
+
+DEPARTMENT_NAME                               STAFF_COUNT
+--------------------------------------------- -----------
+Diagnostic_2                                            2
+Otolaryngology                                          2
+Surgery                                                 2
+Pulmonology                                             2
+Nephrology                                              2
+
+27 rows selected. 
+
+
+    EMP_ID FIRST_NAME                                    LAST_NAME                                     YEARS_AT_HOSPITAL
+---------- --------------------------------------------- --------------------------------------------- -----------------
+        92 Sarah                                         Boyd                                                      10.66
+
+
+ID_PATIENT FIRST_NAME                                    LAST_NAME                                     CONDITION_COUNT
+---------- --------------------------------------------- --------------------------------------------- ---------------
+CONDITIONS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+         1 John                                          Doe                                                         4 
+Flu, Gastritis, Gastritis, Rheumatoid Arthritis                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
+
+
+
+   ROOM_ID ROOM_TYPE                                     HOSPITALIZATION_COUNT
+---------- --------------------------------------------- ---------------------
+        37 Economy                                                           7
+        38 Family                                                            7
+        39 Penthouse                                                         7
+        40 Executive                                                         7
+        41 Single                                                            6
+        42 Double                                                            5
+         6 VIP                                                               3
+         8 Family                                                            3
+         9 Penthouse                                                         3
+        10 Executive                                                         3
+         7 Economy                                                           2
+
+   ROOM_ID ROOM_TYPE                                     HOSPITALIZATION_COUNT
+---------- --------------------------------------------- ---------------------
+        35 Deluxe                                                            2
+        36 VIP                                                               2
+        44 Standard                                                          2
+        45 Deluxe                                                            2
+        46 VIP                                                               2
+        47 Economy                                                           2
+        48 Family                                                            2
+        49 Penthouse                                                         2
+        50 Executive                                                         2
+         1 Single                                                            1
+         2 Double                                                            1
+
+   ROOM_ID ROOM_TYPE                                     HOSPITALIZATION_COUNT
+---------- --------------------------------------------- ---------------------
+         3 Suite                                                             1
+         4 Standard                                                          1
+         5 Deluxe                                                            1
+        11 Single                                                            1
+        12 Double                                                            1
+        13 Suite                                                             1
+        14 Standard                                                          1
+        15 Deluxe                                                            1
+        16 VIP                                                               1
+        17 Economy                                                           1
+        18 Family                                                            1
+
+   ROOM_ID ROOM_TYPE                                     HOSPITALIZATION_COUNT
+---------- --------------------------------------------- ---------------------
+        19 Penthouse                                                         1
+        20 Executive                                                         1
+        21 Single                                                            1
+        22 Double                                                            1
+        23 Suite                                                             1
+        24 Standard                                                          1
+        25 Deluxe                                                            1
+        26 VIP                                                               1
+        27 Economy                                                           1
+        28 Family                                                            1
+        29 Penthouse                                                         1
+
+   ROOM_ID ROOM_TYPE                                     HOSPITALIZATION_COUNT
+---------- --------------------------------------------- ---------------------
+        30 Executive                                                         1
+        31 Single                                                            1
+        32 Double                                                            1
+        33 Suite                                                             1
+        34 Standard                                                          1
+        43 Suite                                                             1
+        51 Single                                                            0
+        52 Double                                                            0
+        53 Suite                                                             0
+        54 Standard                                                          0
+        55 Deluxe                                                            0
+
+   ROOM_ID ROOM_TYPE                                     HOSPITALIZATION_COUNT
+---------- --------------------------------------------- ---------------------
+        56 VIP                                                               0
+        57 Economy                                                           0
+        58 Family                                                            0
+        59 Penthouse                                                         0
+        60 Executive                                                         0
+
+60 rows selected. 
+
+
+ IDPATIENT PATIENT_FNAME                                 PATIENT_LNAME                                 APPOINTMENT_COUNT
+---------- --------------------------------------------- --------------------------------------------- -----------------
+        87 Madison                                       Nguyen                                                        3
+        86 Ethan                                         Duong                                                         3
+        30 Amelia                                        Huynh                                                         3
+        83 Sofia                                         Pham                                                          3
+        81 Ella                                          Le                                                            3
+        10 Emma                                          Perez                                                         3
+        51 Olivia                                        Nguyen                                                        2
+        53 Emma                                          Dinh                                                          2
+        59 Charlotte                                     Trinh                                                         2
+        61 Ava                                           Nguyen                                                        2
+        67 Evelyn                                        Ly                                                            2
+
+ IDPATIENT PATIENT_FNAME                                 PATIENT_LNAME                                 APPOINTMENT_COUNT
+---------- --------------------------------------------- --------------------------------------------- -----------------
+        71 Olivia                                        Tran                                                          2
+        74 Lucas                                         Ha                                                            2
+        76 William                                       Bui                                                           2
+        77 Sophia                                        Phan                                                          2
+        80 Benjamin                                      Vu                                                            2
+        85 Scarlett                                      Dang                                                          2
+        50 Samuel                                        Vo                                                            2
+        13 Ethan                                         Lopez                                                         2
+        12 Isabella                                      Hernandez                                                     2
+        11 Jacob                                         Rodriguez                                                     2
+        88 Jacob                                         Lam                                                           2
+
+ IDPATIENT PATIENT_FNAME                                 PATIENT_LNAME                                 APPOINTMENT_COUNT
+---------- --------------------------------------------- --------------------------------------------- -----------------
+        90 Michael                                       Do                                                            2
+         1 John                                          Doe                                                           2
+        89 Amelia                                        Tran                                                          1
+         4 Emily                                         Brown                                                         1
+         7 James                                         Lopez                                                         1
+         8 Olivia                                        Lee                                                           1
+         9 Benjamin                                      Gonzalez                                                      1
+        14 Mia                                           Gomez                                                         1
+        15 Alexander                                     Diaz                                                          1
+        16 Ava                                           Rivera                                                        1
+        17 William                                       Smith                                                         1
+
+ IDPATIENT PATIENT_FNAME                                 PATIENT_LNAME                                 APPOINTMENT_COUNT
+---------- --------------------------------------------- --------------------------------------------- -----------------
+        18 Sophia                                        Gonzalez                                                      1
+        19 Michael                                       Martinez                                                      1
+        20 Olivia                                        Perez                                                         1
+        21 Liam                                          Torres                                                        1
+        22 Emma                                          Flores                                                        1
+        23 Noah                                          Ramirez                                                       1
+        24 Olivia                                        Gutierrez                                                     1
+        26 Ava                                           Tran                                                          1
+        32 Isabella                                      Phan                                                          1
+        34 Oliver                                        Truong                                                        1
+        35 Charlotte                                     Ngo                                                           1
+
+ IDPATIENT PATIENT_FNAME                                 PATIENT_LNAME                                 APPOINTMENT_COUNT
+---------- --------------------------------------------- --------------------------------------------- -----------------
+        36 Lucas                                         Vuong                                                         1
+        37 Amelia                                        Pham                                                          1
+        38 Benjamin                                      Le                                                            1
+        39 Evelyn                                        Bui                                                           1
+        40 Alexander                                     Ho                                                            1
+        41 Sophia                                        Nguyen                                                        1
+        43 Madison                                       Dinh                                                          1
+        44 Aiden                                         Vo                                                            1
+        45 Scarlett                                      Huynh                                                         1
+        47 Victoria                                      Lam                                                           1
+        48 Joseph                                        Mai                                                           1
+
+ IDPATIENT PATIENT_FNAME                                 PATIENT_LNAME                                 APPOINTMENT_COUNT
+---------- --------------------------------------------- --------------------------------------------- -----------------
+        49 Natalie                                       Trinh                                                         1
+        52 Ethan                                         Tran                                                          1
+        56 William                                       Do                                                            1
+        58 James                                         Mai                                                           1
+        60 Logan                                         Vo                                                            1
+        62 Mason                                         Pham                                                          1
+        63 Harper                                        Ho                                                            1
+        64 Elijah                                        Truong                                                        1
+        65 Amelia                                        Le                                                            1
+        68 Alexander                                     Dang                                                          1
+        69 Abigail                                       Vuong                                                         1
+
+ IDPATIENT PATIENT_FNAME                                 PATIENT_LNAME                                 APPOINTMENT_COUNT
+---------- --------------------------------------------- --------------------------------------------- -----------------
+        70 Michael                                       Duong                                                         1
+        73 Emma                                          Luu                                                           1
+        79 Mia                                           Nguyen                                                        1
+
+69 rows selected. 
+
+
+ IDPATIENT PATIENT_FNAME                                 PATIENT_LNAME                                 SUM_TOTAL_BILL
+---------- --------------------------------------------- --------------------------------------------- --------------
+        75 Avery                                         Hoang                                               14978.98
+        55 Isabella                                      Huynh                                               14813.35
+        28 Sophia                                        Le                                                  13496.36
+        54 Noah                                          Vo                                                     12020
+        68 Alexander                                     Dang                                                11359.58
+        33 Mason                                         Duong                                               11343.57
+        57 Sophia                                        Lam                                                  11130.1
+         2 Jane                                          Smith                                               10203.34
+        29 Logan                                         Do                                                  10092.73
+        70 Michael                                       Duong                                                   9275
+        87 Madison                                       Nguyen                                               9129.27
+
+ IDPATIENT PATIENT_FNAME                                 PATIENT_LNAME                                 SUM_TOTAL_BILL
+---------- --------------------------------------------- --------------------------------------------- --------------
+        76 William                                       Bui                                                     8665
+        58 James                                         Mai                                                  8655.88
+        27 James                                         Kim                                                     8370
+         9 Benjamin                                      Gonzalez                                                7845
+        42 Jackson                                       Tran                                                  7604.6
+        82 Alexander                                     Ho                                                   7422.57
+         5 William                                       Martinez                                                7350
+        62 Mason                                         Pham                                                    6425
+        11 Jacob                                         Rodriguez                                               6330
+        89 Amelia                                        Tran                                                 5886.11
+        73 Emma                                          Luu                                                  5614.49
+
+ IDPATIENT PATIENT_FNAME                                 PATIENT_LNAME                                 SUM_TOTAL_BILL
+---------- --------------------------------------------- --------------------------------------------- --------------
+        64 Elijah                                        Truong                                                  4700
+         6 Sophia                                        Garcia                                                  4570
+        78 Logan                                         Trinh                                                   4200
+         3 Michael                                       Johnson                                                 3655
+        66 Benjamin                                      Ngo                                                     3620
+        90 Michael                                       Do                                                      3250
+        65 Amelia                                        Le                                                      2350
+        72 James                                         Vo                                                   2300.42
+        14 Mia                                           Gomez                                                   1980
+        56 William                                       Do                                                      1980
+        63 Harper                                        Ho                                                      1720
+
+ IDPATIENT PATIENT_FNAME                                 PATIENT_LNAME                                 SUM_TOTAL_BILL
+---------- --------------------------------------------- --------------------------------------------- --------------
+        52 Ethan                                         Tran                                                    1635
+        69 Abigail                                       Vuong                                                   1425
+        85 Scarlett                                      Dang                                                    1090
+        84 Henry                                         Tran                                                     690
+        60 Logan                                         Vo                                                       610
+        25 William                                       Nguyen                                                   550
+        31 Ethan                                         Vo                                                       340
+
+40 rows selected. 
+
+
+AVERAGE_LENGTH_OF_STAY
+----------------------
+                 14.61
+
