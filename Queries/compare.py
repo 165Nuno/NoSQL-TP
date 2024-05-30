@@ -147,7 +147,7 @@ def measure_query_time(query_function, num_trials=1, skip_first=True):
 
 def run_and_compare_query(query_name, neo4j_function, sql_function, mongo_function):
     skip_first = True
-    num_trials = 5
+    num_trials = 10
 
     # Run and time Neo4j query
     neo4j_time, neo4j_results = measure_query_time(neo4j_function, num_trials, skip_first)
