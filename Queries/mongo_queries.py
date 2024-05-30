@@ -1,5 +1,4 @@
 from pymongo import MongoClient
-from prettytable import PrettyTable
 from datetime import datetime
 
 # Conectar ao MongoDB
@@ -14,17 +13,14 @@ def run_query1_mongo():
 
     # Query para ordenar os medicamentos por custo em ordem decrescente
     medicamentos = medicine_collection.find().sort('cost', -1)
-
-    # Crie uma tabela para exibir os resultados
-    tabela = PrettyTable()
-    tabela.field_names = ["ID", "Nome", "Quantidade", "Custo"]
-
-    # Adicione os dados dos medicamentos na tabela
+    results = []
     for medicamento in medicamentos:
-        tabela.add_row([medicamento['_id'], medicamento['name'], medicamento['quantity'], medicamento['cost']])
-
-    # Imprima a tabela
-    print(tabela)
+        results.append({
+            'id': medicamento['_id'],
+            'name': medicamento['name'],
+            'cost': medicamento['cost']
+        })
+    return results
 
 # Listar pacientes que têm mais de 3 episodes por ordem descrescente
 def run_query2_mongo():
@@ -52,17 +48,15 @@ def run_query2_mongo():
     ]
     
     pacientes = patients_collection.aggregate(pipeline)
-
-    # Crie uma tabela para exibir os resultados
-    tabela = PrettyTable()
-    tabela.field_names = ["ID", "Primeiro Nome", "Último Nome", "Número de Episódios"]
-
-    # Adicione os dados dos pacientes na tabela
+    results = []
     for paciente in pacientes:
-        tabela.add_row([paciente['_id'], paciente['first_name'], paciente['last_name'], paciente['num_episodes']])
-
-    # Imprima a tabela
-    print(tabela)
+        results.append({
+            'id_patient': paciente['_id'],
+            'patient_fname': paciente['first_name'],
+            'patient_lname': paciente['last_name'],
+            'episode_count': paciente['num_episodes']
+        })
+    return results
 
 # Listar pacientes e as seus contactos de emergência
 def run_query3_mongo():
@@ -76,14 +70,18 @@ def run_query3_mongo():
        'emergency_contacts': 1
    }
    # Executar a consulta
-   results = db.patients.find(query, projection)
-   # Criar uma tabela bonita para exibir os resultados
-   table = PrettyTable()
-   table.field_names = ["ID", "First Name", "Last Name", "Emergency Contact Name", "Emergency Contact Phone"]   
-   for patient in results:
-       for emergency_contact in patient['emergency_contacts']:
-           table.add_row([patient['_id'], patient['first_name'], patient['last_name'], emergency_contact['name'], emergency_contact['phone']])   
-   print(table)
+   patients = db.patients.find(query, projection)
+   results = []
+   for patient in patients:
+     for emergency_contact in patient['emergency_contacts']:
+         results.append({
+             'id_patient': patient['_id'], 
+             'patient_fname': patient['first_name'], 
+             'patient_lname': patient['last_name'],
+             'contact_name': emergency_contact['name'], 
+             'phone': emergency_contact['phone']
+         })
+   return results
 
 # Listar as salas com o maior custo de hospitalização total
 def run_query4_mongo():
@@ -128,20 +126,19 @@ def run_query4_mongo():
 
     # Executar a agregação
     resultados = db.patients.aggregate(pipeline)
+    results = []
 
-    # Criar uma tabela bonita
-    table = PrettyTable()
-    table.field_names = ["ID da Sala", "Tipo da Sala", "Total de Custo"]
-
-    # Adicionar os resultados à tabela
     for resultado in resultados:
         room_id = resultado['_id']
         room_type = db.rooms.find_one({'_id': room_id})['type']
         total_cost = resultado['total_cost']
-        table.add_row([room_id, room_type, total_cost])
+        results.append({
+            'room_id': room_id,
+            'room_type': room_type,
+            'total_cost': total_cost
+        })
 
-    # Exibir a tabela
-    print(table)
+    return results
 
 def run_query5_mongo():
     pipeline = [
@@ -182,16 +179,13 @@ def run_query5_mongo():
 
     resultados = db.patients.aggregate(pipeline)
 
-    # Criar uma tabela bonita
-    table = PrettyTable()
-    table.field_names = ["Tipo de Sala", "Número de Pacientes Únicos"]
-
-    # Adicionar os resultados à tabela
+    results = []
     for resultado in resultados:
-        table.add_row([resultado['_id'], resultado['num_pacientes']])
+        results.append({
+            'room_type': resultado['_id'], 
+            'unique_patient_count': resultado['num_pacientes']})
 
-    # Exibir a tabela
-    print(table)
+    return results
     
 # Listar os tipos de sala e o custo médio por tipo
 def run_query6_mongo():
@@ -211,16 +205,15 @@ def run_query6_mongo():
 
     resultados = db.rooms.aggregate(pipeline)
 
-    # Criar uma tabela bonita
-    table = PrettyTable()
-    table.field_names = ["Tipo de Sala", "Custo Médio"]
-
-    # Adicionar os resultados à tabela
+    results = []
     for resultado in resultados:
-        table.add_row([resultado['_id'], round(resultado['custo_medio'], 2)])
+        results.append({
+            'room_type': resultados['_id'],
+            'average_cost': round(resultado['custo_medio'], 2)
+        })
+        
 
-    # Exibir a tabela
-    print(table)
+    return results
 
     
 # Contar o número de funcionários por departamento, ordenado pelo número de funcionários
@@ -245,16 +238,15 @@ def run_query7_mongo():
 
     resultados = db.department.aggregate(pipeline)
 
-    # Criar uma tabela bonita
-    table = PrettyTable()
-    table.field_names = ["Departamento", "Total de Funcionários"]
-
-    # Adicionar os resultados à tabela
+    results = []
     for resultado in resultados:
-        table.add_row([resultado['name'], resultado['total_count']])
+        results.append({
+            'department_name': resultado['name'], 
+            'staff_count': resultado['total_count']
+        })
+        
 
-    # Exibir a tabela
-    print(table)
+    return results
     
     
     
@@ -310,18 +302,17 @@ def run_query8_mongo():
     # Executar a pipeline de agregação
     resultado = list(db.staff.aggregate(pipeline))
 
-    # Criar uma tabela para exibir os resultados
-    table = PrettyTable()
-    table.field_names = ["ID", "First Name", "Last Name", "Years of Service"]
-
-    # Adicionar os resultados à tabela
+    results = []
     if resultado:
         funcionario = resultado[0]
-        table.add_row([funcionario["_id"], funcionario["first_name"], funcionario["last_name"], round(funcionario["tempo_ativo_anos"], 2)])
-
-    # Exibir a tabela
-    print("Funcionário com mais tempo de serviço ativo:")
-    print(table)
+        results.append({
+            'emp_id': funcionario["_id"], 
+            'first_name': funcionario["first_name"], 
+            'last_name': funcionario["last_name"], 
+            'years_at_hospital': round(funcionario["tempo_ativo_anos"], 2)
+        })
+        
+    return results
     
     
     
@@ -352,19 +343,19 @@ def run_query9_mongo():
     # Executar a pipeline de agregação
     resultado = list(db.patients.aggregate(pipeline))
 
-    # Criar uma tabela para exibir os resultados
-    table = PrettyTable()
-    table.field_names = ["ID", "First Name", "Last Name", "Medical History Count", "Medical Conditions"]
-
-    # Adicionar os resultados à tabela
+    results = []
     if resultado:
         paciente = resultado[0]
         medical_conditions = ", ".join(paciente["medical_history_conditions"])
-        table.add_row([paciente["_id"], paciente["first_name"], paciente["last_name"], paciente["medical_history_count"], medical_conditions])
-
-    # Exibir a tabela
-    print("Paciente com mais condições médicas e suas condições:")
-    print(table)
+        results.append({
+            'id_patient': paciente["_id"], 
+            'first_name': paciente["first_name"], 
+            'last_name': paciente["last_name"], 
+            'condition_count': paciente["medical_history_count"], 
+            'conditions': medical_conditions
+        })
+    
+    return results
     
 
 #  Listar todas as hospitalizações em uma sala específica
@@ -411,20 +402,18 @@ def run_query10_mongo():
     # Executar a query
     result = list(rooms_collection.aggregate(pipeline))
 
-    # Criar uma tabela para exibir os resultados
-    table = PrettyTable()
-    table.field_names = ["Room", "Room Type", "Hospitalizações"]
-
-    # Adicionar os resultados à tabela
+    results = []
     for room in result:
         room_id = room["_id"]
         room_type = room["type"]
         hospitalizacoes = room["hospitalizations"]
-        table.add_row([room_id, room_type, hospitalizacoes])
+        results.append({
+            'room_id': room_id,
+            'room_type':room_type,
+            'hospitalization_count': hospitalizacoes
+        })
 
-    # Exibir a tabela
-    print("Hospitalizações por Sala:")
-    print(table)
+    return results
     
 
 # Pacientes com maior quantidade de appointments
@@ -464,21 +453,16 @@ def run_query11_mongo():
     # Executar a query
     result = list(patients_collection.aggregate(pipeline))
 
-    # Criar uma tabela para exibir os resultados
-    table = PrettyTable()
-    table.field_names = ["ID", "First Name", "Last Name", "Número de Appointments"]
-
-    # Adicionar os resultados à tabela
+    results = []
     for patient in result:
-        patient_id = patient["_id"]
-        first_name = patient["first_name"]
-        last_name = patient["last_name"]
-        num_appointments = patient["num_appointments"]
-        table.add_row([patient_id, first_name, last_name, num_appointments])
+        results.append({
+            'idpatient': patient["_id"],
+            'patient_fname': patient["first_name"],
+            'patient_lname': patient["last_name"],
+            'appointment_count': patient["num_appointments"]
+        })
 
-    # Exibir a tabela
-    print("Pacientes com Maior Quantidade de Appointments:")
-    print(table)
+    return results
 
 
 # Custo total de bill por paciente
@@ -520,21 +504,16 @@ def run_query12_mongo():
     # Executar a agregação
     result = list(patients_collection.aggregate(pipeline))
 
-    # Criar uma tabela para exibir os resultados
-    table = PrettyTable()
-    table.field_names = ["ID", "First Name", "Last Name", "Custo Total de Bills"]
-
-    # Adicionar os resultados à tabela
+    results = []
     for patient in result:
-        patient_id = patient["_id"]
-        first_name = patient["first_name"]
-        last_name = patient["last_name"]
-        total_bill_cost = patient["total_bill_cost"]
-        table.add_row([patient_id, first_name, last_name, total_bill_cost])
+        results.append({
+            'idpatient': patient["_id"],
+            'patient_fname': patient["first_name"],
+            'patient_lname': patient["last_name"],
+            'sum_total_bill': patient["total_bill_cost"]
+        })
 
-    # Exibir a tabela
-    print("Custo Total de Bill por Paciente:")
-    print(table)
+    return results
     
     
     
@@ -590,13 +569,14 @@ def run_query13_mongo():
 
     # Executar a agregação
     result = list(patients_collection.aggregate(pipeline))
-
+    results = []
     # Exibir a média total da duração da estadia de hospitalização
     if result:
         media_total = result[0]["media_total_duracao_estadia"]
-        print("Média Total da Duração da Estadia de Hospitalização (em dias):", media_total)
-    else:
-        print("Não há dados disponíveis para calcular a média total.")
+        results.append({
+            'avg_hospitalization_stay': media_total
+        })
+    return results
     
     
     
@@ -605,29 +585,7 @@ def run_query13_mongo():
     
 # Executar todas as consultas
 if __name__ == "__main__":
-    print("1. Lista por ordem decrescente dos medicamentos mais caros")
-    run_query1_mongo()
-    print("\n2. Listar pacientes que têm mais de 3 episódios por ordem decrescente")
-    run_query2_mongo()
-    print("\n3. Listar pacientes e seus contatos de emergência")
-    run_query3_mongo()
-    print("\n4. Listar as salas com o maior custo de hospitalização total")
-    run_query4_mongo()
-    print("\n5. Contar o número de pacientes únicos por tipo de sala")
-    run_query5_mongo()
-    print("\n6. Listar os tipos de sala e o custo médio por tipo")
-    run_query6_mongo()
-    print("\n7. Contar o número de funcionários por departamento")
-    run_query7_mongo()
-    print("\n8. O funcionário com mais tempo de serviço ativo")
-    run_query8_mongo()
-    print("\n9. O paciente com mais condições médicas e suas condições")
-    run_query9_mongo()
-    print("\n10. Listar todas as hospitalizações em uma sala específica")
-    run_query10_mongo()
-    print("\n11. Obter pacientes com mais consultas")
-    run_query11_mongo()
-    print("\n12. Obter custo total da conta por paciente, ordenado")
-    run_query12_mongo()
-    print("\n13. Obter média de estadia hospitalar")
-    run_query13_mongo()
+   print(run_query9_mongo())
+  
+   
+   
