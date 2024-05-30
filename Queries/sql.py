@@ -1,7 +1,12 @@
 import oracledb
+import getpass
+
+# Solicitar a user e senha do utilizador para Oracle
+oracle_username = getpass.getpass("Enter Oracle username: ")
+oracle_password = getpass.getpass("Enter Oracle password: ")
 
 #oracle_connection = oracledb.connect(user="sys", password="<12345>",
-oracle_connection = oracledb.connect(user="sys", password="password",
+oracle_connection = oracledb.connect(user=oracle_username, password=oracle_password,
                               dsn="localhost:1521/xe", mode=oracledb.SYSDBA)
 print("Conexão Oracle realizada com sucesso!")
 

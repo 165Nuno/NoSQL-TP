@@ -6,6 +6,8 @@ from prettytable import PrettyTable
 # Conectar ao MongoDB
 client = MongoClient("mongodb://localhost:27017/")
 
+print("Conexão MongoDB realizada com sucesso!")
+
 # Selecionar o banco de dados
 db = client["hospital"]
 

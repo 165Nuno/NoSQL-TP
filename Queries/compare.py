@@ -4,6 +4,7 @@ import os
 
 from neo4j import *
 from sql import *
+from mongo_queries import *
 
 # Determine the script directory and create the output directory if it doesnt exist
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -16,13 +17,18 @@ def write_to_file(filepath, content):
     with open(filepath, 'w') as f:
         f.write(content)
 
-def compare_queries(query_name: str, neo4j_results, sql_results, neo4j_time, sql_time):
+def compare_queries(query_name: str, neo4j_results, sql_results, mongo_results, neo4j_time, sql_time, mongo_time):
     # Convert lists of dictionaries to sets of tuples
+    print(neo4j_results)
+    print(sql_results)
+    print(mongo_results)
     neo4j_set = {tuple(d.items()) for d in neo4j_results}
     sql_set = {tuple(d.items()) for d in sql_results}
+    mongo_set = {tuple(d.items()) for d in mongo_results}
+
 
     # match is the boolean that represents if the results of the queries are equal or not
-    match = neo4j_set == sql_set
+    match = neo4j_set == sql_set == mongo_set
 
     # Print the comparison result
     table = PrettyTable()
@@ -35,8 +41,9 @@ def compare_queries(query_name: str, neo4j_results, sql_results, neo4j_time, sql
 
     if not match:
         # Find differences
-        neo4j_only = neo4j_set - sql_set
-        sql_only = sql_set - neo4j_set
+        neo4j_only = neo4j_set - sql_set - mongo_set
+        sql_only = sql_set - neo4j_set - mongo_set
+        mongo_only = mongo_set - sql_set - neo4j_set
 
         if len(neo4j_only) > 0:
             diff_table_neo4j = PrettyTable()
@@ -60,16 +67,30 @@ def compare_queries(query_name: str, neo4j_results, sql_results, neo4j_time, sql
                 diff_table_sql.add_row(row)
             result_content += f"\n{diff_table_sql}\n"
 
+        if len(mongo_only) > 0:
+            diff_table_mongo = PrettyTable()
+            diff_table_mongo.title = "Different table Mongo"
+            diff_table_mongo.field_names = ["Source"] + list(mongo_results[0].keys())
+            mongo_columns = list(mongo_results[0].keys())
+            for entry in mongo_only:
+                entry_dict = dict(entry)
+                row = ["MongoDB"] + [entry_dict[col] for col in mongo_columns]
+                diff_table_mongo.add_row(row)
+            result_content += f"\n{diff_table_mongo}\n"
+
     write_to_file(result_file_path, result_content)
 
     results_table_sql = PrettyTable()
     results_table_sql.title = "Results Sql"
     results_table_neo4j = PrettyTable()
     results_table_neo4j.title = "Results Neo4j"
+    results_table_mongo = PrettyTable()
+    results_table_mongo.title = "Results MongoDB"
     
     # Write the results and execution times to separate files
     neo4j_result_file = os.path.join(output_dir, f"{query_name.lower().replace(' ', '_')}_neo4j.txt")
     sql_result_file = os.path.join(output_dir, f"{query_name.lower().replace(' ', '_')}_sql.txt")
+    mongo_result_file = os.path.join(output_dir, f"{query_name.lower().replace(' ', '_')}_mongodb.txt")
     
     if len(sql_results) > 0:
         sql_columns = list(sql_results[0].keys())
@@ -78,6 +99,7 @@ def compare_queries(query_name: str, neo4j_results, sql_results, neo4j_time, sql
             entry_dict = dict(entry)
             row = [entry_dict[col] for col in sql_columns]
             results_table_sql.add_row(row)
+        print(results_table_sql)
     
     if len(neo4j_results) > 0:
         neo4j_columns = list(neo4j_results[0].keys())
@@ -86,16 +108,26 @@ def compare_queries(query_name: str, neo4j_results, sql_results, neo4j_time, sql
             entry_dict = dict(entry)
             row = [entry_dict[col] for col in neo4j_columns]
             results_table_neo4j.add_row(row)
-    print(results_table_sql)
-    print(results_table_neo4j)
+        print(results_table_neo4j)
+    
+    if len(mongo_results) > 0:
+        mongo_columns = list(mongo_results[0].keys())
+        results_table_mongo.field_names = mongo_columns
+        for entry in mongo_results:
+            entry_dict = dict(entry)
+            row = [entry_dict[col] for col in mongo_columns]
+            results_table_mongo.add_row(row)
+        print(results_table_mongo)
 
-    sql_result_content = f"Execution Time: {sql_time:.5f} seconds\nResults:\n{results_table_sql}"
-    neo4j_result_content = f"Execution Time: {neo4j_time:.5f} seconds\nResults:\n{results_table_neo4j}"
+    sql_result_content = f"Execution Time: {sql_time:.5f} seconds\nResults:\n{results_table_sql if len(sql_results) > 0 else 'No Results'}"
+    neo4j_result_content = f"Execution Time: {neo4j_time:.5f} seconds\nResults:\n{results_table_neo4j if len(neo4j_results) > 0 else 'No Results'}"
+    mongo_result_content = f"Execution Time: {mongo_time:.5f} seconds\nResults:\n{results_table_mongo if len(mongo_results) > 0 else 'No Results'}"
 
     write_to_file(neo4j_result_file, neo4j_result_content)
     write_to_file(sql_result_file, sql_result_content)
+    write_to_file(mongo_result_file, mongo_result_content)
 
-def run_and_compare_query(query_name, neo4j_function, sql_function):
+def run_and_compare_query(query_name, neo4j_function, sql_function, mongo_function):
     # Run and time Neo4j query
     start_time = time.time()
     neo4j_results = neo4j_function()
@@ -106,20 +138,25 @@ def run_and_compare_query(query_name, neo4j_function, sql_function):
     sql_results = sql_function()
     sql_time = time.time() - start_time
 
+    # Run and time MongoDB query
+    start_time = time.time()
+    mongo_results = mongo_function()
+    mongo_time = time.time() - start_time
+
     # Compare the results
-    compare_queries(query_name, neo4j_results, sql_results, neo4j_time, sql_time)
+    compare_queries(query_name, neo4j_results, sql_results, mongo_results, neo4j_time, sql_time, mongo_time)
 
 if __name__ == "__main__":
-    run_and_compare_query("Query 1", run_query1_neo4j, run_query1_sql)
-    run_and_compare_query("Query 2", run_query2_neo4j, run_query2_sql)
-    run_and_compare_query("Query 3", run_query3_neo4j, run_query3_sql)
-    run_and_compare_query("Query 4", run_query4_neo4j, run_query4_sql)
-    run_and_compare_query("Query 5", run_query5_neo4j, run_query5_sql)
-    run_and_compare_query("Query 6", run_query6_neo4j, run_query6_sql)
-    run_and_compare_query("Query 7", run_query7_neo4j, run_query7_sql)
-    run_and_compare_query("Query 8", run_query8_neo4j, run_query8_sql)
-    run_and_compare_query("Query 9", run_query9_neo4j, run_query9_sql)
-    run_and_compare_query("Query 10", run_query10_neo4j, run_query10_sql)
-    run_and_compare_query("Query 11", run_query11_neo4j, run_query11_sql)
-    run_and_compare_query("Query 12", run_query12_neo4j, run_query12_sql)
-    run_and_compare_query("Query 13", run_query13_neo4j, run_query13_sql)
+    run_and_compare_query("Query 1", run_query1_neo4j, run_query1_sql, run_query1_mongo)
+    run_and_compare_query("Query 2", run_query2_neo4j, run_query2_sql, run_query2_mongo)
+    run_and_compare_query("Query 3", run_query3_neo4j, run_query3_sql, run_query3_mongo)
+    run_and_compare_query("Query 4", run_query4_neo4j, run_query4_sql, run_query4_mongo)
+    run_and_compare_query("Query 5", run_query5_neo4j, run_query5_sql, run_query5_mongo)
+    run_and_compare_query("Query 6", run_query6_neo4j, run_query6_sql, run_query6_mongo)
+    run_and_compare_query("Query 7", run_query7_neo4j, run_query7_sql, run_query7_mongo)
+    run_and_compare_query("Query 8", run_query8_neo4j, run_query8_sql, run_query8_mongo)
+    run_and_compare_query("Query 9", run_query9_neo4j, run_query9_sql, run_query9_mongo)
+    run_and_compare_query("Query 10", run_query10_neo4j, run_query10_sql, run_query10_mongo)
+    run_and_compare_query("Query 11", run_query11_neo4j, run_query11_sql, run_query11_mongo)
+    run_and_compare_query("Query 12", run_query12_neo4j, run_query12_sql, run_query12_mongo)
+    run_and_compare_query("Query 13", run_query13_neo4j, run_query13_sql, run_query13_mongo)

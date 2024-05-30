@@ -3,13 +3,14 @@ from pymongo import MongoClient
 import getpass
 import traceback
 
-# Solicitar a senha do usuário para Oracle
+# Solicitar a user e senha do utilizador para Oracle
+oracle_username = getpass.getpass("Enter Oracle username: ")
 oracle_password = getpass.getpass("Enter Oracle password: ")
 
 try:
     # Conectar ao banco de dados Oracle
     oracle_connection = oracledb.connect(
-        user='nosql',
+        user=oracle_username,
         password=oracle_password,
         dsn='localhost/xe'
     )
