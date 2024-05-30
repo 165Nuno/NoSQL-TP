@@ -596,7 +596,7 @@ if __name__ == "__main__":
     func_name = f'run_query{i}_mongo'
     func = globals().get(func_name)
     if func is not None:
-         tempos[f'Query{i}'] = tempo(func)
+         tempos[f'{i}'] = tempo(func)
     else:
         print(f"Função {func_name} não encontrada.")
   
