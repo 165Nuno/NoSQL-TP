@@ -19,13 +19,9 @@ def write_to_file(filepath, content):
 
 def compare_queries(query_name: str, neo4j_results, sql_results, mongo_results, neo4j_time, sql_time, mongo_time):
     # Convert lists of dictionaries to sets of tuples
-    print(neo4j_results)
-    print(sql_results)
-    print(mongo_results)
     neo4j_set = {tuple(d.items()) for d in neo4j_results}
     sql_set = {tuple(d.items()) for d in sql_results}
     mongo_set = {tuple(d.items()) for d in mongo_results}
-
 
     # match is the boolean that represents if the results of the queries are equal or not
     match = neo4j_set == sql_set == mongo_set
@@ -99,7 +95,6 @@ def compare_queries(query_name: str, neo4j_results, sql_results, mongo_results, 
             entry_dict = dict(entry)
             row = [entry_dict[col] for col in sql_columns]
             results_table_sql.add_row(row)
-        print(results_table_sql)
     
     if len(neo4j_results) > 0:
         neo4j_columns = list(neo4j_results[0].keys())
@@ -108,7 +103,6 @@ def compare_queries(query_name: str, neo4j_results, sql_results, mongo_results, 
             entry_dict = dict(entry)
             row = [entry_dict[col] for col in neo4j_columns]
             results_table_neo4j.add_row(row)
-        print(results_table_neo4j)
     
     if len(mongo_results) > 0:
         mongo_columns = list(mongo_results[0].keys())
@@ -117,7 +111,6 @@ def compare_queries(query_name: str, neo4j_results, sql_results, mongo_results, 
             entry_dict = dict(entry)
             row = [entry_dict[col] for col in mongo_columns]
             results_table_mongo.add_row(row)
-        print(results_table_mongo)
 
     sql_result_content = f"Execution Time: {sql_time:.5f} seconds\nResults:\n{results_table_sql if len(sql_results) > 0 else 'No Results'}"
     neo4j_result_content = f"Execution Time: {neo4j_time:.5f} seconds\nResults:\n{results_table_neo4j if len(neo4j_results) > 0 else 'No Results'}"
