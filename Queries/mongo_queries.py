@@ -1,5 +1,7 @@
 from pymongo import MongoClient
 from datetime import datetime
+import time
+from prettytable import PrettyTable
 
 # Conectar ao MongoDB
 client = MongoClient("mongodb://localhost:27017/")
@@ -208,7 +210,7 @@ def run_query6_mongo():
     results = []
     for resultado in resultados:
         results.append({
-            'room_type': resultados['_id'],
+            'room_type': resultado['_id'],
             'average_cost': round(resultado['custo_medio'], 2)
         })
         
@@ -579,13 +581,30 @@ def run_query13_mongo():
     return results
     
     
+def tempo(func):
+    inicio = time.time()
+    func()
+    fim = time.time()
+    return fim - inicio
     
-    
-    
-    
+
 # Executar todas as consultas
 if __name__ == "__main__":
-   print(run_query9_mongo())
-  
+   tempos = {}
    
+   for i in range(1, 14):  # De 1 a 13
+    func_name = f'run_query{i}_mongo'
+    func = globals().get(func_name)
+    if func is not None:
+         tempos[f'Query{i}'] = tempo(func)
+    else:
+        print(f"Função {func_name} não encontrada.")
+  
+   table = PrettyTable()
+   table.field_names = ["Query", "Tempo de Execução (segundos)"]
+   
+   for nome, tempo in tempos.items():
+       table.add_row([nome, f"{tempo:.4f}"])
+   
+   print(table)
    
