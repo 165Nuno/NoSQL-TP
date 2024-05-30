@@ -120,6 +120,11 @@ def run_query4_mongo():
             }
         },
         {
+        '$match': {
+            'total_cost': {'$gt': 0}
+        }
+        },
+        {
             '$sort': {
                 'total_cost': -1
             }
@@ -448,8 +453,12 @@ def run_query11_mongo():
                 }
             }
         },
-        { "$sort": { "num_appointments": -1 } },
-        {"$limit": 10}
+        {
+        '$match': {
+            'num_appointments': {'$gt': 0}
+        }
+    },
+        { "$sort": { "num_appointments": -1 } }
     ]
 
     # Executar a query
@@ -594,6 +603,7 @@ def tempo_medio(func, num_execucoes=10):
 
 # Executar todas as consultas
 if __name__ == "__main__":
+   
    tempos = {}
    
    for i in range(1, 14):  # De 1 a 13
@@ -603,7 +613,7 @@ if __name__ == "__main__":
          tempos[f'{i}'] = tempo_medio(func)
     else:
         print(f"Função {func_name} não encontrada.")
-  
+ 
    table = PrettyTable()
    table.field_names = ["Query", "Tempo de Execução (segundos)"]
    
@@ -611,4 +621,5 @@ if __name__ == "__main__":
        table.add_row([nome, f"{tempo:.4f}"])
    
    print(table)
+   
    
