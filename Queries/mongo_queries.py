@@ -581,11 +581,15 @@ def run_query13_mongo():
     return results
     
     
-def tempo(func):
-    inicio = time.time()
-    func()
-    fim = time.time()
-    return fim - inicio
+def tempo_medio(func, num_execucoes=10):
+    tempos = []
+    for i in range(num_execucoes):
+        inicio = time.time()
+        func()
+        fim = time.time()
+        #print(f"{func} {i} - {fim - inicio}")
+        tempos.append(fim - inicio)
+    return sum(tempos) / num_execucoes
     
 
 # Executar todas as consultas
@@ -596,7 +600,7 @@ if __name__ == "__main__":
     func_name = f'run_query{i}_mongo'
     func = globals().get(func_name)
     if func is not None:
-         tempos[f'{i}'] = tempo(func)
+         tempos[f'{i}'] = tempo_medio(func)
     else:
         print(f"Função {func_name} não encontrada.")
   
