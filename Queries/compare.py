@@ -120,21 +120,43 @@ def compare_queries(query_name: str, neo4j_results, sql_results, mongo_results, 
     write_to_file(sql_result_file, sql_result_content)
     write_to_file(mongo_result_file, mongo_result_content)
 
+"""
+Measures the elapsed time of the query received as input.
+Repeats the query num_trials times, and returns the average time
+if skip_first, it doesn't count the first execution of the query
+
+Returns the average time and the result of the query
+"""
+def measure_query_time(query_function, num_trials=1, skip_first=True):
+    assert num_trials > 0
+    result = None
+    if skip_first:
+        query_function()
+
+    elapsed_times = []
+    for i in range(num_trials):
+        start_time = time.time()
+        result = query_function()
+        end_time = time.time()
+        elapsed_times.append(end_time - start_time)
+
+    avg_time = sum(elapsed_times) / len(elapsed_times)
+    
+    return avg_time, result
+
+
 def run_and_compare_query(query_name, neo4j_function, sql_function, mongo_function):
+    skip_first = True
+    num_trials = 5
+
     # Run and time Neo4j query
-    start_time = time.time()
-    neo4j_results = neo4j_function()
-    neo4j_time = time.time() - start_time
+    neo4j_time, neo4j_results = measure_query_time(neo4j_function, num_trials, skip_first)
 
     # Run and time SQL query
-    start_time = time.time()
-    sql_results = sql_function()
-    sql_time = time.time() - start_time
+    sql_time, sql_results = measure_query_time(sql_function, num_trials, skip_first)
 
     # Run and time MongoDB query
-    start_time = time.time()
-    mongo_results = mongo_function()
-    mongo_time = time.time() - start_time
+    mongo_time, mongo_results = measure_query_time(mongo_function, num_trials, skip_first)
 
     # Compare the results
     compare_queries(query_name, neo4j_results, sql_results, mongo_results, neo4j_time, sql_time, mongo_time)
