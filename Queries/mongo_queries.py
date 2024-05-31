@@ -294,7 +294,7 @@ def run_query8_mongo():
         {
             "$addFields": {
                 "tempo_ativo_anos": {
-                    "$divide": ["$tempo_ativo_dias", 365]
+                    "$divide": ["$tempo_ativo_dias", 365.25]
                 }
             }
         },
