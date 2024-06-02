@@ -1,0 +1,255 @@
+QUERY 1 -- Lista por ordem decrescente dos medicamentos mais caros
+
+db.medicine.find().sort({ cost: -1 })
+
+QUERY 2 -- Listar pacientes que têm mais de 3 episodes por ordem descrescente
+
+db.patients.aggregate([
+    {
+        $project: {
+            first_name: 1,
+            last_name: 1,
+            num_episodes: { $size: '$episodes' }
+        }
+    },
+    {
+        $match: {
+            num_episodes: { $gt: 3 }
+        }
+    },
+    {
+        $sort: {
+            num_episodes: -1
+        }
+    }
+])
+
+QUERY 3 -- Listar pacientes e os seus contactos de emergência
+
+db.patients.find({}, {
+    first_name: 1,
+    last_name: 1,
+    emergency_contacts: 1
+})
+
+QUERY 4 -- Listar as salas com o maior custo de hospitalização total
+
+db.patients.aggregate([
+    { $unwind: '$episodes' },
+    { $unwind: '$episodes.events' },
+    { $match: { 'episodes.events.type': 'hospitalization' } },
+    { $lookup: {
+        from: 'bills',
+        localField: 'episodes._id',
+        foreignField: 'id_episode',
+        as: 'hospital_bills'
+    }},
+    { $unwind: { path: '$hospital_bills', preserveNullAndEmptyArrays: true }},
+    { $group: {
+        _id: '$episodes.events.room',
+        total_cost: { $sum: '$hospital_bills.total' }
+    }},
+    { $match: { total_cost: { $gt: 0 } }},
+    { $lookup: {
+        from: 'rooms',
+        localField: '_id',
+        foreignField: '_id',
+        as: 'room_details'
+    }},
+    { $unwind: '$room_details' },
+    { $sort: { total_cost: -1 }},
+    { $project: {
+        room_id: '$_id',
+        room_type: '$room_details.type',
+        total_cost: 1
+    }}
+])
+
+QUERY 5 -- Listar o tipo de sala e a quantidade de pacientes únicos que ficaram em cada tipo de sala
+
+db.patients.aggregate([
+    { $unwind: '$episodes' },
+    { $unwind: '$episodes.events' },
+    { $match: { 'episodes.events.type': 'hospitalization' }},
+    { $lookup: {
+        from: 'rooms',
+        localField: 'episodes.events.room',
+        foreignField: '_id',
+        as: 'room'
+    }},
+    { $unwind: '$room' },
+    { $group: {
+        _id: '$room.type',
+        pacientes: { $addToSet: '$_id' }
+    }},
+    { $project: {
+        _id: 1,
+        num_pacientes: { $size: '$pacientes' }
+    }},
+    { $sort: { num_pacientes: -1 }}
+])
+
+QUERY 6 -- Listar os tipos de sala e o custo médio por tipo
+
+db.rooms.aggregate([
+    { $group: {
+        _id: '$type',
+        custo_medio: { $avg: '$cost' }
+    }},
+    { $sort: { custo_medio: -1 }}
+])
+
+QUERY 7 -- Contar o número de funcionários por departamento, ordenado pelo número de funcionários
+
+db.department.aggregate([
+    { $project: {
+        _id: 1,
+        name: 1,
+        total_count: {
+            $sum: [
+                { $size: '$active' },
+                { $size: '$inactive' }
+            ]
+        }
+    }},
+    { $sort: { total_count: -1 }}
+])
+
+QUERY 8 -- O funcionário com mais tempo de serviço ativo
+
+db.staff.aggregate([
+    { $match: { date_separation: null }},
+    { $project: {
+        first_name: 1,
+        last_name: 1,
+        date_joining: 1,
+        tempo_ativo_dias: {
+            $divide: [
+                { $subtract: [new Date(), '$date_joining'] },
+                1000 * 60 * 60 * 24
+            ]
+        },
+        tempo_ativo_anos: {
+            $divide: ['$tempo_ativo_dias', 365.25]
+        }
+    }},
+    { $sort: { tempo_ativo_anos: -1 }},
+    { $limit: 1 }
+])
+
+QUERY 9 -- O paciente com mais condições médicas e suas condições
+
+db.patients.aggregate([
+    { $project: {
+        first_name: 1,
+        last_name: 1,
+        medical_history_count: { $size: '$medical_history' },
+        medical_history_conditions: '$medical_history.condition'
+    }},
+    { $sort: { medical_history_count: -1 }},
+    { $limit: 1 }
+])
+
+QUERY 10 -- Listar todas as hospitalizações em uma sala específica
+
+db.rooms.aggregate([
+    { $lookup: {
+        from: 'patients',
+        let: { room_id: '$_id' },
+        pipeline: [
+            { $unwind: '$episodes' },
+            { $unwind: '$episodes.events' },
+            { $match: { $expr: { $and: [
+                { $eq: ['$episodes.events.room', '$$room_id'] },
+                { $eq: ['$episodes.events.type', 'hospitalization'] }
+            ]}}},
+            { $count: 'count' }
+        ],
+        as: 'hospitalizations'
+    }},
+    { $project: {
+        _id: 1,
+        type: 1,
+        hospitalizations: { $ifNull: [{ $arrayElemAt: ['$hospitalizations.count', 0] }, 0] }
+    }},
+    { $sort: { hospitalizations: -1 }}
+])
+
+QUERY 11 -- Pacientes com maior quantidade de appointments
+
+db.patients.aggregate([
+    { $project: {
+        first_name: 1,
+        last_name: 1,
+        num_appointments: {
+            $sum: {
+                $map: {
+                    input: '$episodes',
+                    as: 'episode',
+                    in: {
+                        $size: {
+                            $filter: {
+                                input: '$$episode.events',
+                                as: 'event',
+                                cond: { $eq: ['$$event.type', 'appointment'] }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }},
+    { $match: { num_appointments: { $gt: 0 } }},
+    { $sort: { num_appointments: -1 }}
+])
+
+QUERY 12 -- Custo total de bill por paciente
+
+db.patients.aggregate([
+    { $unwind: '$bills' },
+    { $lookup: {
+        from: 'bills',
+        localField: 'bills',
+        foreignField: '_id',
+        as: 'bill_details'
+    }},
+    { $unwind: '$bill_details' },
+    { $group: {
+        _id: '$_id',
+        first_name: { $first: '$first_name' },
+        last_name: { $first: '$last_name' },
+        total_bill_cost: { $sum: '$bill_details.total' }
+    }},
+    { $sort: { total_bill_cost: -1 }}
+])
+
+QUERY 13 -- Média da duração da estadia de hospitalização
+
+db.patients.aggregate([
+    { $unwind: '$episodes' },
+    { $unwind: '$episodes.events' },
+    { $match: {
+        'episodes.events.type': 'hospitalization',
+        'episodes.events.admission_date': { $exists: true },
+        'episodes.events.discharge_date': { $exists: true }
+    }},
+    { $project: {
+        duracao_estadia: {
+            $divide: [
+                { $subtract: [
+                    { $toDate: '$episodes.events.discharge_date' },
+                    { $toDate: '$episodes.events.admission_date' }
+                ]},
+                86400000  // Converter milissegundos para dias
+            ]
+        }
+    }},
+    { $group: {
+        _id: null,
+        media_total_duracao_estadia: { $avg: '$duracao_estadia' }
+    }},
+    { $project: {
+        _id: 0,
+        media_total_duracao_estadia: { $round: ['$media_total_duracao_estadia', 2] }
+    }}
+])
