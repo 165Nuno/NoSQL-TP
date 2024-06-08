@@ -1,5 +1,5 @@
 from pymongo import MongoClient, ReturnDocument
-from bson import ObjectId
+
 
 # Connect to MongoDB
 mongo_client = MongoClient('mongodb://localhost:27017/')
@@ -8,7 +8,7 @@ bills_collection = mongo_db['bills']
 
 def sp_update_bill_status(p_bill_id, p_paid_value):
     try:
-        bill = bills_collection.find_one({'_id': ObjectId(p_bill_id)})
+        bill = bills_collection.find_one({'_id': p_bill_id})
         if not bill:
             raise ValueError("Bill not found")
         
@@ -17,7 +17,7 @@ def sp_update_bill_status(p_bill_id, p_paid_value):
         if p_paid_value < v_total:
             # Update status to FAILURE
             bills_collection.find_one_and_update(
-                {'_id': ObjectId(p_bill_id)},
+                {'_id': p_bill_id},
                 {'$set': {'payment_status': 'FAILURE'}},
                 return_document=ReturnDocument.AFTER
             )
@@ -25,7 +25,7 @@ def sp_update_bill_status(p_bill_id, p_paid_value):
         else:
             # Update status to PROCESSED
             updated_bill = bills_collection.find_one_and_update(
-                {'_id': ObjectId(p_bill_id)},
+                {'_id': p_bill_id},
                 {'$set': {'payment_status': 'PROCESSED'}},
                 return_document=ReturnDocument.AFTER
             )
@@ -35,7 +35,7 @@ def sp_update_bill_status(p_bill_id, p_paid_value):
         print(f"An error occurred: {e}")
 
 if __name__ == '__main__':
-    bill_id = input("Enter the bill ID: ")
+    bill_id = int(input("Enter the bill ID: "))
     paid_value = float(input("Enter the paid value: "))
     updated_bill = sp_update_bill_status(bill_id, paid_value)
     print(updated_bill)
