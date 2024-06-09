@@ -1,13 +1,17 @@
 import oracledb
 from py2neo import Graph, Node, Relationship
 import time
+import getpass
 
 # 2089 NODOS e 3461 RELAÇÕES
 
+# Solicitar a user e senha do utilizador para Oracle
+oracle_username = getpass.getpass("Enter Oracle username: ")
+oracle_password = getpass.getpass("Enter Oracle password: ")
+
 print("Inicio da migração para Neo4j")
 inicio = time.time()
-oracle_connection = oracledb.connect(user="sys", password="<12345>",
-#oracle_connection = oracledb.connect(user="sys", password="password",
+oracle_connection = oracledb.connect(user=oracle_username, password=oracle_password,
                               dsn="localhost:1521/xe", mode=oracledb.SYSDBA)
 
 print("Conexão Oracle realizada com sucesso!")
