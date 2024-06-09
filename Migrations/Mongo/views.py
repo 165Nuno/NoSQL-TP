@@ -1,18 +1,28 @@
 from pymongo import MongoClient
 
-mongo_client = MongoClient('mongodb://localhost:27017/')
-mongo_db = mongo_client['hospital']
-appointment_collection = mongo_db['appointment']
-
-def patient_appointment_view():
+def create_patient_appointment_view():
+    # Connect to MongoDB
+    mongo_client = MongoClient('mongodb://localhost:27017/')
+    mongo_db = mongo_client['hospital']
 
     # Define the pipeline to perform the join and shape the output
     pipeline = [
         {
+            '$unwind': '$episodes'
+        },
+        {
+            '$unwind': '$episodes.events'
+        },
+        {
+            '$match': {
+                'episodes.events.type': 'appointment'
+            }
+        },
+        {
             '$lookup': {
-                'from': 'doctor',
-                'localField': 'iddoctor',
-                'foreignField': 'emp_id',
+                'from': 'staff',
+                'localField': 'episodes.events.doctor',
+                'foreignField': '_id',
                 'as': 'doctor'
             }
         },
@@ -21,20 +31,9 @@ def patient_appointment_view():
         },
         {
             '$lookup': {
-                'from': 'staff',
-                'localField': 'doctor.emp_id',
-                'foreignField': 'emp_id',
-                'as': 'staff'
-            }
-        },
-        {
-            '$unwind': '$staff'
-        },
-        {
-            '$lookup': {
                 'from': 'department',
-                'localField': 'staff.iddepartment',
-                'foreignField': 'iddepartment',
+                'localField': 'doctor.iddepartment',
+                'foreignField': '_id',
                 'as': 'department'
             }
         },
@@ -42,50 +41,30 @@ def patient_appointment_view():
             '$unwind': '$department'
         },
         {
-            '$lookup': {
-                'from': 'episode',
-                'localField': 'idepisode',
-                'foreignField': 'idepisode',
-                'as': 'episode'
-            }
-        },
-        {
-            '$unwind': '$episode'
-        },
-        {
-            '$lookup': {
-                'from': 'patient',
-                'localField': 'episode.patient_idpatient',
-                'foreignField': 'idpatient',
-                'as': 'patient'
-            }
-        },
-        {
-            '$unwind': '$patient'
-        },
-        {
             '$project': {
-                'appointment_scheduled_date': '$scheduled_on',
-                'appointment_date': '$appointment_date',
-                'appointment_time': '$appointment_time',
-                'doctor_id': '$doctor.emp_id',
+                'appointment_scheduled_date': '$episodes.events.scheduled_on',
+                'appointment_date': '$episodes.events.appointment_date',
+                'appointment_time': '$episodes.events.appointment_time',
+                'doctor_id': '$doctor._id',
                 'doctor_qualifications': '$doctor.qualifications',
-                'department_name': '$department.dept_name',
-                'patient_first_name': '$patient.patient_fname',
-                'patient_last_name': '$patient.patient_lname',
-                'patient_blood_type': '$patient.blood_type',
-                'patient_phone': '$patient.phone',
-                'patient_email': '$patient.email',
-                'patient_gender': '$patient.gender'
+                'department_name': '$department.name',
+                'patient_first_name': '$first_name',
+                'patient_last_name': '$last_name',
+                'patient_blood_type': '$blood_type',
+                'patient_phone': '$phone',
+                'patient_email': '$email',
+                'patient_gender': '$gender'
             }
         }
     ]
 
-    view_data = appointment_collection.aggregate(pipeline)
+    # Perform aggregation to create the view
+    view_data = mongo_db.patients.aggregate(pipeline)
 
-    return view_data
+    # Convert the cursor to a list and return
+    return list(view_data)
 
-if __name__ == '__main__':
-    view_results = patient_appointment_view()
-    for item in view_results:
-        print(item)
+# Example usage:
+view_results = create_patient_appointment_view()
+for item in view_results:
+    print(item)
