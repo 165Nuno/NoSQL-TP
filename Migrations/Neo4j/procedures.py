@@ -10,7 +10,7 @@ print("Conexão Neo4j realizada com sucesso!")
 
 
 # Create procedure
-def sp_update_bill_status(p_bill_id, p_paid_value):
+def neo_update_bill_status(p_bill_id, p_paid_value):
     try:
         query = """
         MATCH (b:Bill {id_bill: $p_bill_id})
@@ -47,5 +47,5 @@ def sp_update_bill_status(p_bill_id, p_paid_value):
 
 if __name__ == "__main__":
     # run procedure
-    sp_update_bill_status(16, 2000) # Caso de PROCESSED (total = 1980)
-    sp_update_bill_status(19, 200) # CASO DE FAILURE (total = 260)
+    neo_update_bill_status(16, 2000) # Caso de PROCESSED (total = 1980)
+    neo_update_bill_status(19, 200) # CASO DE FAILURE (total = 260)
