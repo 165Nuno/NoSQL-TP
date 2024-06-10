@@ -1,5 +1,5 @@
 from pymongo import MongoClient
-
+import csv 
 def create_patient_appointment_view():
     # Connect to MongoDB
     mongo_client = MongoClient('mongodb://localhost:27017/')
@@ -66,5 +66,33 @@ def create_patient_appointment_view():
 
 # Example usage:
 view_results = create_patient_appointment_view()
-for item in view_results:
-    print(item)
+filename = "patient_appointments.csv"
+
+field_names = ["Id", "Scheduled Date", "Appointment Date", "Appointment Time", "Doctor Id", "Doctor Qualifications", "Department", "Patient First Name", "Patient Last Name", "Patient Blood Type", "Patient Phone", "Patient Email", "Patient Gender"]
+
+key_mapping = {
+    "_id": "Id",
+    "appointment_scheduled_date": "Scheduled Date",
+    "appointment_date": "Appointment Date",
+    "appointment_time": "Appointment Time",
+    "doctor_id": "Doctor Id",
+    "doctor_qualifications": "Doctor Qualifications",
+    "department_name": "Department",
+    "patient_first_name": "Patient First Name",
+    "patient_last_name": "Patient Last Name",
+    "patient_blood_type": "Patient Blood Type",
+    "patient_phone": "Patient Phone",
+    "patient_email": "Patient Email",
+    "patient_gender": "Patient Gender"
+}
+
+with open(filename, mode='w', newline='') as file:
+    writer = csv.DictWriter(file, fieldnames=field_names)
+    
+
+    writer.writeheader()
+    
+    for item in view_results:
+        # Crie um novo dicionário com as chaves mapeadas para os nomes das colunas desejados
+        mapped_item = {key_mapping[key]: value for key, value in item.items() if key in key_mapping}
+        writer.writerow(mapped_item)
