@@ -29,6 +29,7 @@ def sp_update_bill_status(p_bill_id, p_paid_value):
                 {'$set': {'payment_status': 'PROCESSED'}},
                 return_document=ReturnDocument.AFTER
             )
+            print("Bill successfully paid.")
             return updated_bill
     
     except Exception as e:
@@ -38,4 +39,4 @@ if __name__ == '__main__':
     bill_id = int(input("Enter the bill ID: "))
     paid_value = float(input("Enter the paid value: "))
     updated_bill = sp_update_bill_status(bill_id, paid_value)
-    print(updated_bill)
+    
