@@ -1,0 +1,48 @@
+Execution Time: 0.00530 seconds
+Results:
++------------------------------------------------------------+
+|                        Results Sql                         |
++-----------+---------------+---------------+----------------+
+| idpatient | patient_fname | patient_lname | sum_total_bill |
++-----------+---------------+---------------+----------------+
+|     75    |     Avery     |     Hoang     |    14978.98    |
+|     55    |    Isabella   |     Huynh     |    14813.35    |
+|     28    |     Sophia    |       Le      |    13496.36    |
+|     54    |      Noah     |       Vo      |     12020      |
+|     68    |   Alexander   |      Dang     |    11359.58    |
+|     33    |     Mason     |     Duong     |    11343.57    |
+|     57    |     Sophia    |      Lam      |    11130.1     |
+|     2     |      Jane     |     Smith     |    10203.34    |
+|     29    |     Logan     |       Do      |    10092.73    |
+|     70    |    Michael    |     Duong     |      9275      |
+|     87    |    Madison    |     Nguyen    |    9129.27     |
+|     76    |    William    |      Bui      |      8665      |
+|     58    |     James     |      Mai      |    8655.88     |
+|     27    |     James     |      Kim      |      8370      |
+|     9     |    Benjamin   |    Gonzalez   |      7845      |
+|     42    |    Jackson    |      Tran     |     7604.6     |
+|     82    |   Alexander   |       Ho      |    7422.57     |
+|     5     |    William    |    Martinez   |      7350      |
+|     62    |     Mason     |      Pham     |      6425      |
+|     11    |     Jacob     |   Rodriguez   |      6330      |
+|     89    |     Amelia    |      Tran     |    5886.11     |
+|     73    |      Emma     |      Luu      |    5614.49     |
+|     64    |     Elijah    |     Truong    |      4700      |
+|     6     |     Sophia    |     Garcia    |      4570      |
+|     78    |     Logan     |     Trinh     |      4200      |
+|     3     |    Michael    |    Johnson    |      3655      |
+|     66    |    Benjamin   |      Ngo      |      3620      |
+|     90    |    Michael    |       Do      |      3250      |
+|     65    |     Amelia    |       Le      |      2350      |
+|     72    |     James     |       Vo      |    2300.42     |
+|     56    |    William    |       Do      |      1980      |
+|     14    |      Mia      |     Gomez     |      1980      |
+|     63    |     Harper    |       Ho      |      1720      |
+|     52    |     Ethan     |      Tran     |      1635      |
+|     69    |    Abigail    |     Vuong     |      1425      |
+|     85    |    Scarlett   |      Dang     |      1090      |
+|     84    |     Henry     |      Tran     |      690       |
+|     60    |     Logan     |       Vo      |      610       |
+|     25    |    William    |     Nguyen    |      550       |
+|     31    |     Ethan     |       Vo      |      340       |
++-----------+---------------+---------------+----------------+

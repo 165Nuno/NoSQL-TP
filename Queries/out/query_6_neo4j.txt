@@ -1,0 +1,18 @@
+Execution Time: 0.01635 seconds
+Results:
++--------------------------+
+|      Results Neo4j       |
++-----------+--------------+
+| room_type | average_cost |
++-----------+--------------+
+| Penthouse |    525.0     |
+| Executive |    410.0     |
+|    VIP    |    310.0     |
+|   Suite   |    265.0     |
+|   Deluxe  |    210.0     |
+|   Family  |    190.0     |
+|   Double  |    165.0     |
+|   Single  |    110.0     |
+|  Standard |     85.0     |
+|  Economy  |     75.0     |
++-----------+--------------+

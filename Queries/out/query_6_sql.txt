@@ -1,0 +1,18 @@
+Execution Time: 0.00478 seconds
+Results:
++--------------------------+
+|       Results Sql        |
++-----------+--------------+
+| room_type | average_cost |
++-----------+--------------+
+| Penthouse |     525      |
+| Executive |     410      |
+|    VIP    |     310      |
+|   Suite   |     265      |
+|   Deluxe  |     210      |
+|   Family  |     190      |
+|   Double  |     165      |
+|   Single  |     110      |
+|  Standard |      85      |
+|  Economy  |      75      |
++-----------+--------------+

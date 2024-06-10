@@ -1,0 +1,20 @@
+Execution Time: 0.02843 seconds
+Results:
++------------------------------------------------------------+
+|                       Results Neo4j                        |
++------------+---------------+---------------+---------------+
+| id_patient | patient_fname | patient_lname | episode_count |
++------------+---------------+---------------+---------------+
+|     30     |     Amelia    |     Huynh     |       8       |
+|     10     |      Emma     |     Perez     |       4       |
+|     11     |     Jacob     |   Rodriguez   |       4       |
+|     12     |    Isabella   |   Hernandez   |       4       |
+|     13     |     Ethan     |     Lopez     |       4       |
+|     14     |      Mia      |     Gomez     |       4       |
+|     85     |    Scarlett   |      Dang     |       4       |
+|     86     |     Ethan     |     Duong     |       4       |
+|     87     |    Madison    |     Nguyen    |       4       |
+|     88     |     Jacob     |      Lam      |       4       |
+|     89     |     Amelia    |      Tran     |       4       |
+|     90     |    Michael    |       Do      |       4       |
++------------+---------------+---------------+---------------+

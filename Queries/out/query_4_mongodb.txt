@@ -1,0 +1,56 @@
+Execution Time: 0.12680 seconds
+Results:
++----------------------------------+
+|         Results MongoDB          |
++---------+-----------+------------+
+| room_id | room_type | total_cost |
++---------+-----------+------------+
+|    10   | Executive |  13496.36  |
+|    44   |  Standard |  11359.58  |
+|    13   |   Suite   |  11343.57  |
+|    24   |  Standard |  10858.01  |
+|    1    |   Single  |  10203.34  |
+|    11   |   Single  |  10092.73  |
+|    46   |    VIP    |   9275.0   |
+|    31   |   Single  |  9129.27   |
+|    35   |   Deluxe  |   8820.0   |
+|    25   |   Deluxe  |   8665.0   |
+|    38   |   Family  |  8655.88   |
+|    19   | Penthouse |  8402.17   |
+|    9    | Penthouse |   8370.0   |
+|    5    |   Deluxe  |   7845.0   |
+|    14   |  Standard |   7604.6   |
+|    17   |  Economy  |   7580.0   |
+|    27   |  Economy  |  7422.57   |
+|    3    |   Suite   |   7350.0   |
+|    36   |    VIP    |  7233.35   |
+|    40   | Executive |   6425.0   |
+|    6    |    VIP    |   6330.0   |
+|    32   |   Double  |  5886.11   |
+|    41   |   Single  |   4700.0   |
+|    4    |  Standard |   4570.0   |
+|    48   |   Family  |  4524.49   |
+|    49   | Penthouse |  4120.97   |
+|    2    |   Double  |   3655.0   |
+|    43   |   Suite   |   3360.0   |
+|    33   |   Suite   |   3250.0   |
+|    16   |    VIP    |   3200.0   |
+|    50   | Executive |   3130.0   |
+|    37   |  Economy  |  2727.93   |
+|    42   |   Double  |   2350.0   |
+|    7    |  Economy  |   1980.0   |
+|    18   |   Family  |   1980.0   |
+|    22   |   Double  |  1720.42   |
+|    20   | Executive |   1720.0   |
+|    34   |  Standard |   1635.0   |
+|    45   |   Deluxe  |   1425.0   |
+|    23   |   Suite   |   1090.0   |
+|    29   | Penthouse |   1090.0   |
+|    26   |    VIP    |   1070.0   |
+|    28   |   Family  |   690.0    |
+|    39   | Penthouse |   610.0    |
+|    47   |  Economy  |   580.0    |
+|    8    |   Family  |   550.0    |
+|    12   |   Double  |   340.0    |
+|    21   |   Single  |   260.0    |
++---------+-----------+------------+

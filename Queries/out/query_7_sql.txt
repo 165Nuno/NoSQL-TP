@@ -1,0 +1,35 @@
+Execution Time: 0.00362 seconds
+Results:
++-------------------------------+
+|          Results Sql          |
++-----------------+-------------+
+| department_name | staff_count |
++-----------------+-------------+
+|  Ophthalmology  |      9      |
+|    Radiology    |      8      |
+|   Rheumatology  |      6      |
+|    Hematology   |      6      |
+|   Cardiology_1  |      6      |
+|    Dentistry    |      6      |
+|    Psychiatry   |      6      |
+|    Gynecology   |      6      |
+|  Endocrinology  |      6      |
+|   Emergency_1   |      3      |
+|   Cardiology_4  |      3      |
+|   Diagnostic_3  |      3      |
+|   Emergency_2   |      3      |
+|   Diagnostic_1  |      3      |
+|   Cardiology_3  |      2      |
+|   Cardiology_2  |      2      |
+|   Diagnostic_2  |      2      |
+|    Pediatrics   |      2      |
+|   Orthopedics   |      2      |
+|    Neurology    |      2      |
+|  Otolaryngology |      2      |
+|     Surgery     |      2      |
+|     Urology     |      2      |
+|   Dermatology   |      2      |
+|   Pulmonology   |      2      |
+|    Nephrology   |      2      |
+|     Oncology    |      2      |
++-----------------+-------------+

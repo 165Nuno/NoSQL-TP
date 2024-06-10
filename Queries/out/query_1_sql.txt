@@ -1,0 +1,28 @@
+Execution Time: 0.00351 seconds
+Results:
++---------------------------------+
+|           Results Sql           |
++----+---------------------+------+
+| id |         name        | cost |
++----+---------------------+------+
+| 8  |    Levothyroxine    | 35.0 |
+| 5  |      Lisinopril     | 30.0 |
+| 10 |      Amlodipine     | 30.0 |
+| 16 |      Metoprolol     | 30.0 |
+| 19 |      Alprazolam     | 30.0 |
+| 4  |    Ciprofloxacin    | 25.0 |
+| 7  |      Metformin      | 25.0 |
+| 12 |       Losartan      | 25.0 |
+| 17 |       Warfarin      | 25.0 |
+| 20 |     Hydrocodone     | 25.0 |
+| 3  |     Amoxicillin     | 20.0 |
+| 6  |     Atorvastatin    | 20.0 |
+| 9  |     Simvastatin     | 20.0 |
+| 13 |     Azithromycin    | 20.0 |
+| 18 |      Fluoxetine     | 20.0 |
+| 2  |      Ibuprofen      | 15.0 |
+| 11 | Hydrochlorothiazide | 15.0 |
+| 15 |      Prednisone     | 15.0 |
+| 1  |     Paracetamol     | 10.0 |
+| 14 |      Omeprazole     | 10.0 |
++----+---------------------+------+

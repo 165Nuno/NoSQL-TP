@@ -1,0 +1,28 @@
+Execution Time: 0.00399 seconds
+Results:
++-------------------------------------------------------------------------------+
+|                                  Results Sql                                  |
++------------+---------------+---------------+-------------------+--------------+
+| id_patient | patient_fname | patient_lname |    contact_name   |    phone     |
++------------+---------------+---------------+-------------------+--------------+
+|     1      |      John     |      Doe      |      John Doe     | 111-222-3333 |
+|     1      |      John     |      Doe      |   Emma Thompson   | 111-222-3323 |
+|     2      |      Jane     |     Smith     |     Jane Smith    | 222-333-4444 |
+|     3      |    Michael    |    Johnson    |   Alice Johnson   | 333-444-5555 |
+|     4      |     Emily     |     Brown     |     Bob Brown     | 444-555-6666 |
+|     4      |     Emily     |     Brown     |  Olivia Rodriguez | 333-444-5555 |
+|     5      |    William    |    Martinez   |    Sarah Wilson   | 555-666-7777 |
+|     6      |     Sophia    |     Garcia    |   Michael Clark   | 666-777-8888 |
+|     6      |     Sophia    |     Garcia    |    James Wilson   | 444-555-6666 |
+|     7      |     James     |     Lopez     |    Emily White    | 777-888-9999 |
+|     7      |     James     |     Lopez     |    Ava Anderson   | 555-666-7777 |
+|     7      |     James     |     Lopez     |   Matthew Evans   | 222-333-4444 |
+|     8      |     Olivia    |      Lee      |     David Lee     | 888-999-0000 |
+|     9      |    Benjamin   |    Gonzalez   | Jennifer Martinez | 999-000-1111 |
+|     10     |      Emma     |     Perez     |   Daniel Harris   | 000-111-2222 |
+|     22     |      Emma     |     Flores    |    Noah Harris    | 000-111-2222 |
+|     44     |     Aiden     |       Vo      |    Mia Martinez   | 999-000-1111 |
+|     55     |    Isabella   |     Huynh     |    Ethan Lewis    | 888-999-0000 |
+|     66     |    Benjamin   |      Ngo      |    Sophia Scott   | 777-888-9999 |
+|     77     |     Sophia    |      Phan     |    Logan Taylor   | 666-777-8888 |
++------------+---------------+---------------+-------------------+--------------+

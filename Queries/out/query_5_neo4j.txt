@@ -1,0 +1,18 @@
+Execution Time: 0.02704 seconds
+Results:
++----------------------------------+
+|          Results Neo4j           |
++-----------+----------------------+
+| room_type | unique_patient_count |
++-----------+----------------------+
+| Penthouse |          13          |
+|  Economy  |          12          |
+|   Family  |          12          |
+| Executive |          12          |
+|   Single  |          8           |
+|    VIP    |          8           |
+|   Double  |          7           |
+|   Deluxe  |          7           |
+|  Standard |          6           |
+|   Suite   |          5           |
++-----------+----------------------+

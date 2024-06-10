@@ -1,0 +1,77 @@
+Execution Time: 0.00675 seconds
+Results:
++---------------------------------------------------------------+
+|                        Results MongoDB                        |
++-----------+---------------+---------------+-------------------+
+| idpatient | patient_fname | patient_lname | appointment_count |
++-----------+---------------+---------------+-------------------+
+|     10    |      Emma     |     Perez     |         3         |
+|     30    |     Amelia    |     Huynh     |         3         |
+|     81    |      Ella     |       Le      |         3         |
+|     83    |     Sofia     |      Pham     |         3         |
+|     86    |     Ethan     |     Duong     |         3         |
+|     87    |    Madison    |     Nguyen    |         3         |
+|     1     |      John     |      Doe      |         2         |
+|     11    |     Jacob     |   Rodriguez   |         2         |
+|     12    |    Isabella   |   Hernandez   |         2         |
+|     13    |     Ethan     |     Lopez     |         2         |
+|     50    |     Samuel    |       Vo      |         2         |
+|     51    |     Olivia    |     Nguyen    |         2         |
+|     53    |      Emma     |      Dinh     |         2         |
+|     59    |   Charlotte   |     Trinh     |         2         |
+|     61    |      Ava      |     Nguyen    |         2         |
+|     67    |     Evelyn    |       Ly      |         2         |
+|     71    |     Olivia    |      Tran     |         2         |
+|     74    |     Lucas     |       Ha      |         2         |
+|     76    |    William    |      Bui      |         2         |
+|     77    |     Sophia    |      Phan     |         2         |
+|     80    |    Benjamin   |       Vu      |         2         |
+|     85    |    Scarlett   |      Dang     |         2         |
+|     88    |     Jacob     |      Lam      |         2         |
+|     90    |    Michael    |       Do      |         2         |
+|     4     |     Emily     |     Brown     |         1         |
+|     7     |     James     |     Lopez     |         1         |
+|     8     |     Olivia    |      Lee      |         1         |
+|     9     |    Benjamin   |    Gonzalez   |         1         |
+|     14    |      Mia      |     Gomez     |         1         |
+|     15    |   Alexander   |      Diaz     |         1         |
+|     16    |      Ava      |     Rivera    |         1         |
+|     17    |    William    |     Smith     |         1         |
+|     18    |     Sophia    |    Gonzalez   |         1         |
+|     19    |    Michael    |    Martinez   |         1         |
+|     20    |     Olivia    |     Perez     |         1         |
+|     21    |      Liam     |     Torres    |         1         |
+|     22    |      Emma     |     Flores    |         1         |
+|     23    |      Noah     |    Ramirez    |         1         |
+|     24    |     Olivia    |   Gutierrez   |         1         |
+|     26    |      Ava      |      Tran     |         1         |
+|     32    |    Isabella   |      Phan     |         1         |
+|     34    |     Oliver    |     Truong    |         1         |
+|     35    |   Charlotte   |      Ngo      |         1         |
+|     36    |     Lucas     |     Vuong     |         1         |
+|     37    |     Amelia    |      Pham     |         1         |
+|     38    |    Benjamin   |       Le      |         1         |
+|     39    |     Evelyn    |      Bui      |         1         |
+|     40    |   Alexander   |       Ho      |         1         |
+|     41    |     Sophia    |     Nguyen    |         1         |
+|     43    |    Madison    |      Dinh     |         1         |
+|     44    |     Aiden     |       Vo      |         1         |
+|     45    |    Scarlett   |     Huynh     |         1         |
+|     47    |    Victoria   |      Lam      |         1         |
+|     48    |     Joseph    |      Mai      |         1         |
+|     49    |    Natalie    |     Trinh     |         1         |
+|     52    |     Ethan     |      Tran     |         1         |
+|     56    |    William    |       Do      |         1         |
+|     58    |     James     |      Mai      |         1         |
+|     60    |     Logan     |       Vo      |         1         |
+|     62    |     Mason     |      Pham     |         1         |
+|     63    |     Harper    |       Ho      |         1         |
+|     64    |     Elijah    |     Truong    |         1         |
+|     65    |     Amelia    |       Le      |         1         |
+|     68    |   Alexander   |      Dang     |         1         |
+|     69    |    Abigail    |     Vuong     |         1         |
+|     70    |    Michael    |     Duong     |         1         |
+|     73    |      Emma     |      Luu      |         1         |
+|     79    |      Mia      |     Nguyen    |         1         |
+|     89    |     Amelia    |      Tran     |         1         |
++-----------+---------------+---------------+-------------------+

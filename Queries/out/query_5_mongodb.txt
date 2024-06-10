@@ -1,0 +1,18 @@
+Execution Time: 0.01821 seconds
+Results:
++----------------------------------+
+|         Results MongoDB          |
++-----------+----------------------+
+| room_type | unique_patient_count |
++-----------+----------------------+
+| Penthouse |          13          |
+|  Economy  |          12          |
+| Executive |          12          |
+|   Family  |          12          |
+|    VIP    |          8           |
+|   Single  |          8           |
+|   Deluxe  |          7           |
+|   Double  |          7           |
+|  Standard |          6           |
+|   Suite   |          5           |
++-----------+----------------------+
