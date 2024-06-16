@@ -5,6 +5,7 @@ import os
 from neo4j import *
 from sql import *
 from mongo import *
+from Queries.neo4j_novas_queries import *
 
 # Determine the script directory and create the output directory if it doesnt exist
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -162,16 +163,29 @@ def run_and_compare_query(query_name, neo4j_function, sql_function, mongo_functi
     compare_queries(query_name, neo4j_results, sql_results, mongo_results, neo4j_time, sql_time, mongo_time)
 
 if __name__ == "__main__":
-    run_and_compare_query("Query 1", run_query1_neo4j, run_query1_sql, run_query1_mongo)
-    run_and_compare_query("Query 2", run_query2_neo4j, run_query2_sql, run_query2_mongo)
-    run_and_compare_query("Query 3", run_query3_neo4j, run_query3_sql, run_query3_mongo)
-    run_and_compare_query("Query 4", run_query4_neo4j, run_query4_sql, run_query4_mongo)
-    run_and_compare_query("Query 5", run_query5_neo4j, run_query5_sql, run_query5_mongo)
-    run_and_compare_query("Query 6", run_query6_neo4j, run_query6_sql, run_query6_mongo)
-    run_and_compare_query("Query 7", run_query7_neo4j, run_query7_sql, run_query7_mongo)
-    run_and_compare_query("Query 8", run_query8_neo4j, run_query8_sql, run_query8_mongo)
-    run_and_compare_query("Query 9", run_query9_neo4j, run_query9_sql, run_query9_mongo)
-    run_and_compare_query("Query 10", run_query10_neo4j, run_query10_sql, run_query10_mongo)
-    run_and_compare_query("Query 11", run_query11_neo4j, run_query11_sql, run_query11_mongo)
-    run_and_compare_query("Query 12", run_query12_neo4j, run_query12_sql, run_query12_mongo)
-    run_and_compare_query("Query 13", run_query13_neo4j, run_query13_sql, run_query13_mongo)
+    #run_and_compare_query("Query 1", run_query1_neo4j, run_query1_sql, run_query1_mongo)
+    #run_and_compare_query("Query 2", run_query2_neo4j, run_query2_sql, run_query2_mongo)
+    #run_and_compare_query("Query 3", run_query3_neo4j, run_query3_sql, run_query3_mongo)
+    #run_and_compare_query("Query 4", run_query4_neo4j, run_query4_sql, run_query4_mongo)
+    #run_and_compare_query("Query 5", run_query5_neo4j, run_query5_sql, run_query5_mongo)
+    #run_and_compare_query("Query 6", run_query6_neo4j, run_query6_sql, run_query6_mongo)
+    #run_and_compare_query("Query 7", run_query7_neo4j, run_query7_sql, run_query7_mongo)
+    #run_and_compare_query("Query 8", run_query8_neo4j, run_query8_sql, run_query8_mongo)
+    #run_and_compare_query("Query 9", run_query9_neo4j, run_query9_sql, run_query9_mongo)
+    #run_and_compare_query("Query 10", run_query10_neo4j, run_query10_sql, run_query10_mongo)
+    #run_and_compare_query("Query 11", run_query11_neo4j, run_query11_sql, run_query11_mongo)
+    #run_and_compare_query("Query 12", run_query12_neo4j, run_query12_sql, run_query12_mongo)
+    #run_and_compare_query("Query 13", run_query13_neo4j, run_query13_sql, run_query13_mongo)
+    run_and_compare_query("Query 1", run_query1_neo4j_nova, run_query1_sql, run_query1_mongo)
+    run_and_compare_query("Query 2", run_query2_neo4j_nova, run_query2_sql, run_query2_mongo)
+    run_and_compare_query("Query 3", run_query3_neo4j_nova, run_query3_sql, run_query3_mongo)
+    run_and_compare_query("Query 4", run_query4_neo4j_nova, run_query4_sql, run_query4_mongo)
+    run_and_compare_query("Query 5", run_query5_neo4j_nova, run_query5_sql, run_query5_mongo)
+    run_and_compare_query("Query 6", run_query6_neo4j_nova, run_query6_sql, run_query6_mongo)
+    run_and_compare_query("Query 7", run_query7_neo4j_nova, run_query7_sql, run_query7_mongo)
+    run_and_compare_query("Query 8", run_query8_neo4j_nova, run_query8_sql, run_query8_mongo)
+    run_and_compare_query("Query 9", run_query9_neo4j_nova, run_query9_sql, run_query9_mongo)
+    run_and_compare_query("Query 10", run_query10_neo4j_nova, run_query10_sql, run_query10_mongo)
+    run_and_compare_query("Query 11", run_query11_neo4j_nova, run_query11_sql, run_query11_mongo)
+    run_and_compare_query("Query 12", run_query12_neo4j_nova, run_query12_sql, run_query12_mongo)
+    run_and_compare_query("Query 13", run_query13_neo4j_nova, run_query13_sql, run_query13_mongo)

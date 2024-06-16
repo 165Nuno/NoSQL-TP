@@ -1,4 +1,4 @@
-Execution Time: 0.00362 seconds
+Execution Time: 0.00210 seconds
 Results:
 +-------------------------------+
 |          Results Sql          |

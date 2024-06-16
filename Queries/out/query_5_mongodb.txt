@@ -1,4 +1,4 @@
-Execution Time: 0.01821 seconds
+Execution Time: 0.00807 seconds
 Results:
 +----------------------------------+
 |         Results MongoDB          |
@@ -7,12 +7,12 @@ Results:
 +-----------+----------------------+
 | Penthouse |          13          |
 |  Economy  |          12          |
-| Executive |          12          |
 |   Family  |          12          |
+| Executive |          12          |
 |    VIP    |          8           |
 |   Single  |          8           |
-|   Deluxe  |          7           |
 |   Double  |          7           |
+|   Deluxe  |          7           |
 |  Standard |          6           |
 |   Suite   |          5           |
 +-----------+----------------------+

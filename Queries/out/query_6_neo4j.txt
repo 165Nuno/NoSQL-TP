@@ -1,4 +1,4 @@
-Execution Time: 0.01635 seconds
+Execution Time: 0.00169 seconds
 Results:
 +--------------------------+
 |      Results Neo4j       |

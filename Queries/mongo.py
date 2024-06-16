@@ -318,7 +318,7 @@ def run_query8_mongo():
             'emp_id': funcionario["_id"], 
             'first_name': funcionario["first_name"], 
             'last_name': funcionario["last_name"], 
-            'years_at_hospital': round(funcionario["tempo_ativo_anos"], 2)
+            'years_at_hospital': round(funcionario["tempo_ativo_anos"], 1)
         })
         
     return results

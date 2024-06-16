@@ -244,6 +244,14 @@ def create_nodes(neo4j):
                           qualifications=staff['qualifications'])
         neo4j.create(staff_node)
 
+    department_nodes = neo4j.nodes.match("Department")
+    for department_node in department_nodes:
+        staff_nodes = neo4j.nodes.match("Staff", iddepartment=department_node["iddepartment"])
+
+        for staff_node in staff_nodes:
+            relationship = Relationship(staff_node, "WORKS_IN_DEPARTMENT", department_node)
+            neo4j.create(relationship)
+
     # Passar a tabela prescriptions para uma relação com propriedades
     prescriptions_query = """
         SELECT idprescription AS "_id", 
@@ -398,6 +406,15 @@ def create_nodes(neo4j):
         
         if insurance_node:
             relationship = Relationship(patient_node, "HAS_INSURANCE", insurance_node)
+            neo4j.create(relationship)
+
+    # [PATIENT] -> [MEDICAL_HISTORY]
+    patient_nodes = neo4j.nodes.match("Patient")
+    for patient_node in patient_nodes:
+        medical_history_nodes = neo4j.nodes.match("Medical_History", id_patient=patient_node["idpatient"])
+
+        for medical_history_node in medical_history_nodes:
+            relationship = Relationship(patient_node, "HAS_MEDICAL_HISTORY", medical_history_node)
             neo4j.create(relationship)
              
 

@@ -212,7 +212,7 @@ SELECT
     s.emp_id AS emp_id, 
     s.emp_fname AS first_name, 
     s.emp_lname AS last_name, 
-    (ROUND((SYSDATE - s.date_joining) / 365.25, 2)) AS years_at_hospital
+    (ROUND((SYSDATE - s.date_joining) / 365.25, 1)) AS years_at_hospital
 FROM 
     SYSTEM.staff s
 WHERE 
