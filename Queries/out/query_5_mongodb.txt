@@ -1,4 +1,4 @@
-Execution Time: 0.00807 seconds
+Execution Time: 0.01686 seconds
 Results:
 +----------------------------------+
 |         Results MongoDB          |
@@ -9,10 +9,10 @@ Results:
 |  Economy  |          12          |
 |   Family  |          12          |
 | Executive |          12          |
-|    VIP    |          8           |
 |   Single  |          8           |
-|   Double  |          7           |
+|    VIP    |          8           |
 |   Deluxe  |          7           |
+|   Double  |          7           |
 |  Standard |          6           |
 |   Suite   |          5           |
 +-----------+----------------------+

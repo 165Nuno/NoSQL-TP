@@ -5,7 +5,7 @@ import os
 from neo4j import *
 from sql import *
 from mongo import *
-from Queries.neo4j_novas_queries import *
+from neo4j_novas_queries import *
 
 # Determine the script directory and create the output directory if it doesnt exist
 script_dir = os.path.dirname(os.path.abspath(__file__))

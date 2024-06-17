@@ -1,4 +1,4 @@
-Execution Time: 0.00226 seconds
+Execution Time: 0.00306 seconds
 Results:
 +------------------------------------------------------------+
 |                      Results MongoDB                       |

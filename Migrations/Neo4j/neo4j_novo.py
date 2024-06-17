@@ -303,7 +303,7 @@ def create_nodes(neo4j):
                 if episode_node:
                 # Adiciona novos atributos ao nó do episódio
                     episode_node['scheduled_on'] = appointment['SCHEDULED_ON']
-                    episode_node['appointmente_date'] = appointment['APPOINTMENT_DATE']
+                    episode_node['appointment_date'] = appointment['APPOINTMENT_DATE']
                     episode_node['appointment_time'] = appointment['APPOINTMENT_TIME']
         
                 # Atualiza o nó no Neo4j
@@ -417,6 +417,30 @@ def create_nodes(neo4j):
             relationship = Relationship(patient_node, "HAS_MEDICAL_HISTORY", medical_history_node)
             neo4j.create(relationship)
              
+    ## Apagar as chaves estrangeiras
+    patient_nodes = neo4j.nodes.match("Patient")
+    for patient_node in patient_nodes:
+        if "policy_number" in patient_node:
+            del patient_node["policy_number"]
+            neo4j.push(patient_node)
+
+    episode_nodes = neo4j.nodes.match("Episode")
+    for episode_node in episode_nodes:
+        if "id_patient" in episode_node:
+            del episode_node["id_patient"]
+            neo4j.push(episode_node)
+    
+    bill_nodes = neo4j.nodes.match("Bill")
+    for bill_node in bill_nodes:
+        if "idepisode" in bill_node:
+            del bill_node["idepisode"]
+            neo4j.push(bill_node)
+
+    staff_nodes = neo4j.nodes.match("Staff")
+    for staff_node in staff_nodes:
+        if "iddepartment" in staff_node:
+            del staff_node["iddepartment"]
+            neo4j.push(staff_node)
 
 def initialize_neo4j(neo4j):
     clear_neo4j_database(neo4j)
