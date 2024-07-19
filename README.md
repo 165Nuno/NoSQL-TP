@@ -18,9 +18,14 @@ This repository contains the practical work for the NoSQL Databases course, invo
 - **hospitalv4.sql** - SQL script for database creation
 - **queries_results.png** - Results obtained from executing queries
 
+## Documentation
 
+[Report](NOSQL_report.pdf)
 
-## Autores
+## Final Grade
+18/20
+
+## Contributors
 
 - [@pedrops164](https://www.github.com/pedrops164)
 - [@freitasmillena](https://www.github.com/freitasmillena)
