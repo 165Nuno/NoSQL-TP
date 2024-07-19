@@ -6,7 +6,7 @@ This repository contains the practical work for the NoSQL Databases course, invo
 
 ## Hospital Database Diagram
 
-![App Screenshot](NoSQL-TP/hospitalER.png)
+![App Screenshot](hospitalER.png)
 
 ## Repository Structure
 
